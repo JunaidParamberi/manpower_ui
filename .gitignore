@@ -1,0 +1,60 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# react-email preview
+.react-email/
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files
+.env
+!.env.example
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+
+# Supabase CLI local state (linked project, versions)
+/supabase/.temp/
+.worktrees/
+
+# Storybook
+storybook-static/
+.superpowers/
+deno.lock
+
+# demo data (mock backend written at runtime — never commit)
+/mock-db.json
+/mock-storage/
+
+# local tooling artifacts
+.playwright-mcp/
+kraft-turn.yml

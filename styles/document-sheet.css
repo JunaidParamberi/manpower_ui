@@ -1,0 +1,1115 @@
+/* Manpower — printable document styles
+ * A4 sheet at 96dpi = 794×1123. We use 800×1130 for visual roundness.
+ * All docs inherit calm, low-chrome aesthetic from the app design tokens.
+ */
+
+.sheet {
+  position: relative;
+  width: 800px;
+  min-height: 1130px;
+  --sheet-ink: #14161a;
+  --sheet-accent: #3550e0;
+  --sheet-accent-soft: #eaeefc;
+  --sheet-muted: #54585f;
+  --sheet-faint: #898e96;
+  --sheet-line: #ecece7;
+  --sheet-line-strong: #d9d9d2;
+  background: #ffffff;
+  color: var(--sheet-ink);
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+  padding: 56px 64px 80px;
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+  box-shadow: 0 1px 0 rgba(20,22,26,0.04), 0 12px 32px -16px rgba(20,22,26,0.18);
+  overflow: hidden;
+}
+
+.sheet--cover { padding: 0; }
+/* Editable paper: one continuous page, popovers may overflow it. It narrows with the pane
+   (down to 640px, then the canvas scrolls) so the documents list can stay open. */
+.sheet--edit { min-height: 0; overflow: visible; width: 100%; max-width: 800px; min-width: 640px; }
+/* Rich text inside the paper takes the paper's colours, in both app themes. */
+.sheet .doc-prose { color: var(--sheet-ink); }
+.sheet .doc-prose blockquote { border-left-color: var(--sheet-line-strong); color: var(--sheet-muted); }
+.sheet .doc-prose hr { border-top-color: var(--sheet-line); }
+.sheet .doc-prose code { background: var(--sheet-line); }
+.sheet .doc-prose p.is-editor-empty:first-child::before { color: var(--sheet-faint); }
+.sheet--page { height: 1130px; min-height: 1130px; overflow: hidden; }
+
+/* Dynamic sheet pagination */
+.document-page-measure {
+  position: fixed;
+  visibility: hidden;
+  pointer-events: none;
+  top: 0;
+  left: -9999px;
+  z-index: -1;
+}
+.document-page-measure-sheet {
+  height: auto;
+  min-height: 0;
+  overflow: visible;
+  box-shadow: none;
+}
+.document-page-header {
+  display: flow-root;
+  flex-shrink: 0;
+}
+.document-page-window {
+  overflow: hidden;
+}
+.document-page-columns {
+  column-fill: auto;
+  column-gap: 0;
+}
+.proposal-page-band {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid #ECECE7;
+  font-size: 11px;
+  color: #898E96;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+/* === Reusable atoms (scoped to .sheet) ============================== */
+
+.sheet h1, .sheet h2, .sheet h3, .sheet h4 {
+  font-family: "Chillax", "Inter", sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: #14161A;
+  margin: 0;
+  line-height: 1.1;
+}
+.sheet .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+.sheet .tabular { font-variant-numeric: tabular-nums; }
+
+.sheet .eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #898E96;
+}
+.sheet .muted { color: #54585F; }
+.sheet .dim { color: #898E96; }
+
+.sheet hr {
+  border: 0;
+  border-top: 1px solid #ECECE7;
+  margin: 0;
+}
+
+/* Brand mark — solid square, like the rail logo */
+.brandmark {
+  width: 38px; height: 38px;
+  border-radius: 9px;
+  background: #14161A;
+  color: #fff;
+  display: grid; place-items: center;
+  font-family: "Chillax", "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.04em;
+  flex-shrink: 0;
+}
+
+/* Document type wordmark (top-right of every doc) */
+.doc-type {
+  font-family: "Chillax", "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 30px;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: #14161A;
+}
+.doc-type-sub {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  color: #54585F;
+  margin-top: 6px;
+}
+
+/* Header layout shared across docs */
+.doc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 36px;
+}
+.doc-header__brand { display: flex; flex-direction: column; gap: 14px; }
+.doc-header__org { font-family: "Chillax", "Inter", sans-serif; font-weight: 600; font-size: 16px; letter-spacing: -0.015em; }
+.doc-header__meta { font-size: 11.5px; color: #54585F; line-height: 1.5; }
+.doc-header__right { text-align: right; }
+
+/* Parties grid (Bill to / From) */
+.parties {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 28px;
+  margin-bottom: 32px;
+}
+.party__label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #898E96;
+  margin-bottom: 8px;
+}
+.party__name { font-weight: 500; font-size: 13.5px; margin-bottom: 2px; }
+.party__line { font-size: 12px; color: #54585F; line-height: 1.55; }
+
+/* Details rows on right side of parties */
+.details-grid { display: grid; gap: 6px; font-size: 12.5px; }
+.details-grid .row {
+  display: flex; justify-content: space-between; gap: 12px;
+}
+.details-grid .row .dim { color: #898E96; }
+
+/* Line items table — used by invoice, quote, proposal pricing */
+.items {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  margin-bottom: 24px;
+}
+.items thead th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #898E96;
+  padding: 10px 0 10px;
+  border-bottom: 1px solid #D9D9D2;
+}
+.items thead th.r { text-align: right; }
+.items tbody td {
+  padding: 14px 0;
+  border-bottom: 1px solid #ECECE7;
+  vertical-align: top;
+}
+.items tbody td.r { text-align: right; font-variant-numeric: tabular-nums; }
+.items tbody td.qty { width: 56px; text-align: right; font-variant-numeric: tabular-nums; color: #54585F; }
+.items tbody td.rate { width: 100px; text-align: right; font-variant-numeric: tabular-nums; color: #54585F; }
+.items tbody td.total { width: 110px; text-align: right; font-variant-numeric: tabular-nums; font-weight: 500; }
+.items tbody td .desc-title { font-weight: 500; color: #14161A; }
+.items tbody td .desc-sub { color: #898E96; font-size: 11.5px; margin-top: 2px; line-height: 1.45; }
+.items tr,
+.items td,
+.items th {
+  break-inside: avoid;
+}
+
+/* Totals block */
+.totals {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 32px;
+}
+.totals__inner {
+  width: 280px;
+  display: grid; gap: 7px;
+  font-size: 12.5px;
+}
+.totals__inner .row { display: flex; justify-content: space-between; }
+.totals__inner .row.grand {
+  padding-top: 10px;
+  margin-top: 4px;
+  border-top: 1px solid #D9D9D2;
+  font-family: "Chillax", "Inter", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.totals__inner .row .tabular { font-variant-numeric: tabular-nums; }
+.totals,
+.totals__inner,
+.totals__inner .row {
+  break-inside: avoid;
+}
+
+/* Footer block — payment terms, notes, signatures */
+.doc-footer {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #ECECE7;
+  font-size: 11.5px;
+  color: #54585F;
+  line-height: 1.55;
+}
+.doc-footer h4 {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #898E96;
+  margin-bottom: 8px;
+}
+.doc-footer .pay-line { display: flex; justify-content: space-between; padding: 4px 0; }
+.doc-footer .pay-line .dim { color: #898E96; }
+.doc-footer .pay-line .v { color: #14161A; font-weight: 500; font-variant-numeric: tabular-nums; }
+.doc-footer,
+.doc-footer h4,
+.doc-footer .pay-line {
+  break-inside: avoid;
+}
+
+/* Sheet edge "page N" marker */
+.page-num {
+  position: absolute;
+  bottom: 28px; left: 64px; right: 64px;
+  display: flex; justify-content: space-between;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #898E96;
+}
+
+/* === PAID stamp (voucher / paid invoice) ============================ */
+.stamp {
+  position: absolute;
+  top: 320px; right: 90px;
+  transform: rotate(-12deg);
+  border: 2.5px solid #1F8A52;
+  color: #1F8A52;
+  padding: 8px 22px 7px;
+  border-radius: 6px;
+  font-family: "Chillax", "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: 0.04em;
+  opacity: 0.85;
+  background: rgba(31, 138, 82, 0.04);
+  pointer-events: none;
+}
+.stamp__sub {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  font-weight: 500;
+  margin-top: 2px;
+  text-align: center;
+  color: #1F8A52;
+}
+
+/* Pill */
+.pill {
+  display: inline-flex;
+  white-space: nowrap;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 500;
+  background: #F4F4F1;
+  color: #54585F;
+  border: 1px solid #ECECE7;
+}
+.pill--success { background: #E6F2EB; color: #1F8A52; border-color: transparent; }
+.pill--warn    { background: #FAF0DD; color: #B36A12; border-color: transparent; }
+.pill--accent  { background: var(--sheet-accent-soft); color: var(--sheet-accent); border-color: transparent; }
+.pill--dot::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor;
+}
+
+/* === Cover page (proposal) ========================================== */
+.cover {
+  position: relative;
+  width: 100%; height: 1130px;
+  background:
+    radial-gradient(900px 600px at 90% -10%, #EAEEFC 0%, transparent 60%),
+    linear-gradient(180deg, #FBFBF9 0%, #ffffff 100%);
+  padding: 64px;
+  display: flex; flex-direction: column;
+}
+.cover__top { display: flex; justify-content: space-between; align-items: center; }
+.cover__id { font-family: "JetBrains Mono", monospace; font-size: 12px; color: #54585F; }
+.cover__body { flex: 1; display: flex; flex-direction: column; justify-content: center; max-width: 600px; }
+.cover__eyebrow {
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sheet-accent);
+  margin-bottom: 24px;
+}
+.cover__title {
+  font-family: "Chillax", "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 64px;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  color: #14161A;
+  text-wrap: balance;
+}
+.cover__sub {
+  font-family: "Chillax", "Inter", sans-serif;
+  font-size: 22px;
+  color: #54585F;
+  letter-spacing: -0.018em;
+  margin-top: 18px;
+  max-width: 520px;
+  line-height: 1.35;
+}
+.cover__meta {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 36px;
+  margin-top: 64px;
+  font-size: 12px;
+}
+.cover__meta .k { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #898E96; margin-bottom: 4px; }
+.cover__meta .v { font-weight: 500; color: #14161A; font-size: 14px; }
+.cover__bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+.cover__from {
+  display: flex; gap: 12px; align-items: center;
+}
+.cover__from .name { font-weight: 500; font-size: 13.5px; }
+.cover__from .role { color: #898E96; font-size: 11.5px; }
+
+/* === Proposal content blocks ======================================== */
+.section { margin-bottom: 36px; }
+.section__title {
+  font-family: "Chillax", "Inter", sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ECECE7;
+  display: flex; align-items: baseline; gap: 12px;
+}
+.section__num {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: #898E96;
+  font-weight: 500;
+}
+.section p { margin: 0 0 12px; color: #14161A; font-size: 13px; line-height: 1.65; }
+.section .lede { font-size: 14.5px; color: #14161A; line-height: 1.6; }
+
+/* Deliverables list */
+.deliverables { display: grid; gap: 1px; background: #ECECE7; border: 1px solid #ECECE7; border-radius: 8px; overflow: hidden; }
+.deliverables .row {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  gap: 14px;
+  padding: 14px 16px;
+  background: #fff;
+  font-size: 12.5px;
+  align-items: flex-start;
+}
+.deliverables .num {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: #898E96;
+  padding-top: 1px;
+}
+.deliverables .name { font-weight: 500; }
+.deliverables .desc { color: #54585F; font-size: 11.5px; margin-top: 2px; line-height: 1.5; }
+.deliverables .hrs { color: #898E96; font-size: 11px; font-variant-numeric: tabular-nums; }
+
+/* Timeline (mini gantt) */
+.timeline { display: grid; gap: 8px; }
+.timeline__week-head {
+  display: grid;
+  grid-template-columns: 180px repeat(8, 1fr);
+  gap: 4px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #898E96;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #ECECE7;
+  margin-bottom: 4px;
+}
+.timeline__week-head .wk { text-align: center; }
+.timeline__row {
+  display: grid;
+  grid-template-columns: 180px repeat(8, 1fr);
+  gap: 4px;
+  align-items: center;
+  padding: 4px 0;
+}
+.timeline__phase { font-weight: 500; font-size: 12.5px; }
+.timeline__bar {
+  height: 8px;
+  background: #14161A;
+  border-radius: 99px;
+}
+.timeline__bar--accent { background: var(--sheet-accent); }
+.timeline__bar--ghost { background: #ECECE7; }
+.timeline__bar--soft { background: #B0BCF6; }
+
+/* Acceptance signature block */
+.signatures {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px;
+  margin-top: 24px;
+  break-inside: avoid;
+}
+.signature__line {
+  border-bottom: 1px solid #D9D9D2;
+  height: 48px;
+  margin-bottom: 8px;
+  position: relative;
+}
+.signature__line.signed::after {
+  content: none;
+}
+.signature__label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #898E96; }
+.signature__name { font-size: 12px; color: #14161A; font-weight: 500; margin-top: 4px; }
+.signature__date { font-size: 11px; color: #898E96; margin-top: 2px; font-variant-numeric: tabular-nums; }
+
+/* === Payment voucher specifics ====================================== */
+.voucher-band {
+  background: #14161A;
+  color: #fff;
+  margin: -56px -64px 32px;
+  padding: 28px 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+}
+.voucher-band .doc-type { color: #fff; }
+.voucher-band .doc-type-sub { color: rgba(255,255,255,0.6); }
+.voucher-band .doc-header__org { color: #fff; }
+.voucher-band .doc-header__meta { color: rgba(255,255,255,0.55); }
+.voucher-band .brandmark {
+  background: #fff; color: #14161A;
+}
+
+.allocations {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  margin-bottom: 24px;
+}
+.allocations thead th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #898E96;
+  padding: 10px 0;
+  border-bottom: 1px solid #D9D9D2;
+}
+.allocations thead th.r { text-align: right; }
+.allocations tbody td {
+  padding: 12px 0;
+  border-bottom: 1px solid #ECECE7;
+  vertical-align: middle;
+}
+.allocations tbody td.r { text-align: right; font-variant-numeric: tabular-nums; }
+.allocations tbody td .mono-id {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  color: #14161A;
+}
+.allocations tr,
+.allocations td,
+.allocations th {
+  break-inside: avoid;
+}
+
+.bigamount {
+  background: #FBFBF9;
+  border: 1px solid #ECECE7;
+  border-radius: 12px;
+  padding: 22px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  break-inside: avoid;
+}
+.bigamount .label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #898E96; }
+.bigamount .value {
+  font-family: "Chillax", "Inter", sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  font-variant-numeric: tabular-nums;
+}
+.bigamount .words {
+  font-size: 11.5px;
+  color: #54585F;
+  margin-top: 4px;
+  font-style: italic;
+}
+
+/* Quote — accept buttons mock */
+.cta-row {
+  display: flex; gap: 10px;
+  margin-top: 16px;
+}
+.cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 13px; font-weight: 500;
+  border: 1px solid transparent;
+}
+.cta--primary { background: var(--sheet-ink); color: #fff; }
+.cta--ghost { background: #fff; color: #14161A; border-color: #D9D9D2; }
+.cta-meta { font-size: 11px; color: #898E96; margin-top: 10px; }
+
+/* Validity banner for quote */
+.banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #FAF0DD;
+  border: 1px solid #F0E0BD;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 28px;
+  font-size: 12.5px;
+  break-inside: avoid;
+}
+.banner__left { display: flex; gap: 10px; align-items: center; color: #7A4A0C; }
+.banner__icon {
+  width: 26px; height: 26px; border-radius: 7px;
+  background: #fff; color: #B36A12;
+  display: grid; place-items: center;
+  flex-shrink: 0;
+}
+.banner__right { font-family: "JetBrains Mono", monospace; font-size: 11.5px; color: #7A4A0C; white-space: nowrap; }
+
+/* Quote: terms / notes beside the totals block. */
+.terms-totals {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 32px;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+/* Optional items section */
+.optional-tag {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 99px;
+  background: #EAEEFC;
+  color: #3550E0;
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+/* === Theme variants =============================================== */
+
+/* MONO — pure black/white, hairlines, no soft colors. */
+.sheet--mono { color: #000; }
+.sheet--mono .brandmark { background: #000; color: #fff; border-radius: 0; }
+.sheet--mono .doc-type { color: #000; }
+.sheet--mono .doc-type-sub { color: #000; }
+.sheet--mono .eyebrow, .sheet--mono .party__label, .sheet--mono .dim,
+.sheet--mono .doc-header__meta, .sheet--mono .desc-sub,
+.sheet--mono .totals__inner .row .dim, .sheet--mono .doc-footer h4,
+.sheet--mono .page-num { color: #6b6b6b; }
+.sheet--mono .items thead th, .sheet--mono hr,
+.sheet--mono .items tbody td { border-color: #000 !important; }
+.sheet--mono .items thead th { color: #000; border-bottom-width: 1.5px; }
+.sheet--mono .items tbody td { border-bottom: 1px solid #e2e2e2; }
+.sheet--mono .totals__inner .row.grand { border-top: 1.5px solid #000; }
+.sheet--mono .pill {
+  background: transparent; color: #000; border: 1px solid #000;
+  border-radius: 0;
+}
+.sheet--mono .pill--success::before, .sheet--mono .pill--accent::before,
+.sheet--mono .pill--warn::before { background: #000 !important; }
+.sheet--mono .doc-footer { border-top: 1.5px solid #000; }
+.sheet--mono .doc-footer .pay-line .v { color: #000; }
+
+/* BRAND — accent-tinted header band, lots of muted-blue. */
+.sheet--brand .brand-band {
+  margin: -56px -64px 36px;
+  padding: 36px 64px 32px;
+  background:
+    radial-gradient(600px 280px at 100% 0%, #DCE3F9 0%, transparent 70%),
+    #EAEEFC;
+  border-bottom: 1px solid #DCE3F9;
+}
+.sheet--brand .brand-band .brandmark { background: #3550E0; }
+.sheet--brand .doc-type { color: #3550E0; }
+.sheet--brand .doc-type-sub { color: #3550E0; opacity: 0.7; }
+.sheet--brand .totals__inner .row.grand { color: #3550E0; border-top-color: #3550E0; }
+.sheet--brand .items thead th { color: #3550E0; border-bottom-color: #DCE3F9; }
+.sheet--brand .party__name { color: #3550E0; }
+
+/* SERIF — editorial, warm, slightly oversized. */
+.sheet--serif {
+  background: #FBFBF6;
+  color: #1a1813;
+  font-family: "Inter", system-ui, sans-serif;
+}
+.sheet--serif .doc-type {
+  font-family: "Iowan Old Style", "Georgia", "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 42px;
+  letter-spacing: -0.02em;
+  color: #1a1813;
+}
+.sheet--serif .doc-type-sub { color: #6b6356; font-family: "Inter", sans-serif; letter-spacing: 0.04em; text-transform: uppercase; font-size: 10.5px; }
+.sheet--serif .brandmark {
+  background: transparent; color: #1a1813;
+  border: 1.5px solid #1a1813; border-radius: 50%;
+  font-family: "Iowan Old Style", Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+}
+.sheet--serif .doc-header__org {
+  font-family: "Iowan Old Style", Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 19px;
+}
+.sheet--serif .eyebrow, .sheet--serif .party__label,
+.sheet--serif .items thead th, .sheet--serif .doc-footer h4 {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: #8a8170;
+}
+.sheet--serif hr, .sheet--serif .items thead th,
+.sheet--serif .items tbody td, .sheet--serif .doc-footer,
+.sheet--serif .totals__inner .row.grand {
+  border-color: #DDD6C5 !important;
+}
+.sheet--serif .dim, .sheet--serif .doc-header__meta,
+.sheet--serif .desc-sub, .sheet--serif .totals__inner .row .dim,
+.sheet--serif .page-num { color: #8a8170; }
+.sheet--serif .muted { color: #5a5346; }
+.sheet--serif .totals__inner .row.grand {
+  font-family: "Iowan Old Style", Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 22px;
+}
+.sheet--serif .pill { background: #F1ECDE; color: #6b6356; border-color: #DDD6C5; }
+.sheet--serif .party__name { font-weight: 500; }
+
+/* === Credit note specifics ========================================== */
+.credit-band {
+  margin: -56px -64px 32px;
+  padding: 28px 64px;
+  background: #FBE9E9;
+  border-bottom: 1px solid #F2D2D2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+}
+.credit-band .doc-type { color: #8E2828; }
+.credit-band .doc-type-sub { color: #8E2828; opacity: 0.75; }
+.credit-band .brandmark { background: #C13838; }
+
+.refund-card {
+  background: #FBFBF9;
+  border: 1px solid #ECECE7;
+  border-radius: 12px;
+  padding: 18px 22px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 24px;
+  align-items: center;
+  margin-bottom: 28px;
+}
+.refund-card .arrow {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: #C13838;
+  color: #fff;
+  display: grid; place-items: center;
+}
+.refund-card .k { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #898E96; margin-bottom: 6px; }
+.refund-card .v {
+  font-family: "Chillax", "Inter", sans-serif;
+  font-weight: 600; letter-spacing: -0.018em;
+  font-size: 17px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* === Delivery note specifics ======================================== */
+.qr {
+  width: 96px; height: 96px;
+  background:
+    linear-gradient(#14161A 0 0) 8px 8px / 18px 18px no-repeat,
+    linear-gradient(#14161A 0 0) 8px 70px / 18px 18px no-repeat,
+    linear-gradient(#14161A 0 0) 70px 8px / 18px 18px no-repeat,
+    repeating-conic-gradient(#14161A 0 25%, #fff 0 50%) 0 0 / 12px 12px;
+  border: 1px solid #ECECE7;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.checklist {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+.checklist .item {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 12.5px;
+}
+.checklist .item .box {
+  width: 16px; height: 16px;
+  border: 1.5px solid #14161A;
+  border-radius: 4px;
+  flex-shrink: 0; margin-top: 1px;
+  display: grid; place-items: center;
+  color: #14161A;
+}
+.checklist .item.checked .box { background: #14161A; color: #fff; }
+
+/* Statement summary cards */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 32px;
+}
+.stat {
+  background: #FBFBF9;
+  border: 1px solid #ECECE7;
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.stat .k { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #898E96; margin-bottom: 6px; }
+.stat .v {
+  font-family: "Chillax", "Inter", sans-serif;
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+  font-variant-numeric: tabular-nums;
+}
+.stat--warn .v { color: #B36A12; }
+.stat--ok .v { color: #1F8A52; }
+
+/* Aging buckets bar */
+.aging-bar {
+  height: 10px;
+  border-radius: 99px;
+  background: #ECECE7;
+  display: flex;
+  overflow: hidden;
+  margin: 12px 0 8px;
+}
+.aging-bar > span { display: block; height: 100%; }
+.aging-legend {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  font-size: 11.5px;
+}
+.aging-legend .item { display: flex; align-items: center; gap: 6px; }
+.aging-legend .swatch { width: 8px; height: 8px; border-radius: 2px; }
+
+/* === Print / PDF export ============================================== */
+@page { size: A4; margin: 0; }
+
+@media print {
+  body { background: #fff; }
+  .sheet {
+    box-shadow: none !important;
+    page-break-after: always;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 14.8mm 16.9mm 21.2mm; /* 56px / 64px / 80px at 96dpi */
+  }
+  .sheet:last-child { page-break-after: auto; }
+  .sheet--cover { page-break-after: always; }
+}
+
+/* === On-screen canvas wrapper ======================================= */
+.sheet-canvas {
+  background: #f0f0ed;
+  display: flex;
+  justify-content: center;
+  padding: 40px 24px;
+  min-height: 100%;
+  overflow-x: auto;
+}
+
+/* Bare host: the paper sits directly on the page (public pay page) instead of
+   the in-app grey viewer canvas. */
+.sheet-host--bare .sheet-canvas {
+  background: transparent;
+  padding: 0;
+  min-height: 0;
+}
+.sheet-host--bare .sheet {
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+/* Mobile: reflow sheet instead of proportional zoom */
+@media (max-width: 767px) {
+  .sheet-canvas {
+    padding: 12px 8px;
+    overflow-x: hidden;
+  }
+
+  .sheet {
+    width: 100%;
+    max-width: 100%;
+    min-height: auto;
+    height: auto !important;
+    padding: 24px 16px 40px;
+    box-shadow: 0 1px 0 rgba(20, 22, 26, 0.04);
+  }
+
+  .sheet--page {
+    height: auto;
+    min-height: auto;
+    overflow: visible;
+  }
+
+  .sheet--cover .cover {
+    padding: 32px 20px;
+  }
+
+  .cover__title {
+    font-size: 2rem;
+  }
+
+  .cover__sub {
+    font-size: 1.125rem;
+  }
+
+  .cover__meta {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 32px;
+  }
+
+  .parties {
+    grid-template-columns: 1fr !important;
+    gap: 20px;
+  }
+
+  .doc-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .doc-header__right {
+    text-align: left;
+  }
+
+  .doc-type {
+    font-size: 1.5rem;
+  }
+
+  .document-page-window {
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .document-page-columns {
+    width: 100% !important;
+    height: auto !important;
+    column-count: 1 !important;
+    transform: none !important;
+  }
+
+  table.items {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* === Tiptap content renderer (proposal body) ======================== */
+.tiptap-body {
+  flex: 1;
+  color: #1a1a1a;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.tiptap-body .tiptap-h1 {
+  font-family: var(--font-heading, "Chillax", sans-serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: #14161a;
+  letter-spacing: -0.4px;
+  margin: 24px 0 10px;
+  break-inside: avoid;
+  break-after: avoid;
+}
+
+.tiptap-body .tiptap-h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #14161a;
+  margin: 20px 0 8px;
+  break-inside: avoid;
+  break-after: avoid;
+}
+
+.tiptap-body .tiptap-h3 {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #14161a;
+  margin: 16px 0 6px;
+  break-inside: avoid;
+  break-after: avoid;
+}
+
+.tiptap-body .tiptap-p {
+  margin: 0 0 10px;
+}
+
+.tiptap-body .tiptap-blockquote {
+  border-left: 3px solid #3550e0;
+  padding-left: 14px;
+  margin: 12px 0;
+  color: #54585f;
+  font-style: italic;
+  break-inside: avoid;
+}
+
+.tiptap-body .tiptap-ul,
+.tiptap-body .tiptap-ol {
+  padding-left: 20px;
+  margin: 0 0 10px;
+}
+
+.tiptap-body .tiptap-li {
+  margin-bottom: 4px;
+  break-inside: avoid;
+}
+
+.tiptap-body .tiptap-code-block {
+  background: #f4f4f5;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin: 12px 0;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11.5px;
+  color: #1a1a1a;
+  overflow-x: auto;
+  break-inside: avoid;
+}
+
+.tiptap-body .tiptap-inline-code {
+  background: #f0f0f0;
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11.5px;
+}
+
+.tiptap-body .tiptap-hr {
+  border: none;
+  border-top: 1px solid #ecece7;
+  margin: 18px 0;
+}
+
+/* Pricing table */
+.tiptap-pricing-table {
+  margin: 16px 0;
+  border: 1px solid #ecece7;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tiptap-pricing-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.tiptap-pricing-table th {
+  background: #f8f8f6;
+  padding: 8px 12px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #898e96;
+  border-bottom: 1px solid #ecece7;
+  text-align: left;
+}
+
+.tiptap-pricing-table th.num,
+.tiptap-pricing-table td.num {
+  text-align: right;
+}
+
+.tiptap-pricing-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #ecece7;
+}
+
+.tiptap-pricing-table tfoot td {
+  background: #fafafa;
+  font-size: 11.5px;
+}
+
+.tiptap-pricing-table .subtotal-row td {
+  color: #54585f;
+  font-size: 11px;
+}
+
+.tiptap-pricing-table .total-row td {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.tiptap-pricing-table td.bold,
+.tiptap-pricing-table th.bold {
+  font-weight: 600;
+}
+
+.tiptap-pricing-table .label {
+  text-align: right;
+  color: #898e96;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 767px) {
+  .sheet-host--bare .sheet-canvas {
+    padding: 0;
+  }
+
+  /* Terms stack above the totals so the totals never overflow the paper. */
+  .terms-totals {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .terms-totals .totals,
+  .terms-totals .totals__inner {
+    width: 100%;
+  }
+
+  /* Sheets reflow to content height on mobile, so the pinned page marker
+     would land on top of the last block. Let it flow after the content. */
+  .sheet .page-num {
+    position: static;
+    margin-top: 32px;
+    gap: 12px;
+  }
+}

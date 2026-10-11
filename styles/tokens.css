@@ -1,0 +1,202 @@
+/* Manpower — design tokens
+ * Soft & calm, Linear-light aesthetic. Muted blue accent.
+ * All tokens mapped to CSS vars; light/dark theme via [data-theme] on <html>.
+ */
+
+:root,
+[data-theme="light"] {
+  /* Surfaces */
+  --bg-canvas: #FBFBF9;          /* warm off-white app background */
+  --bg-surface: #FFFFFF;         /* cards, sheets */
+  --bg-subtle: #F4F4F1;          /* hover, inset panels */
+  --bg-sunken: #EFEFEC;          /* deepest inset */
+  --bg-overlay: rgba(20, 22, 26, 0.32);
+
+  /* Borders */
+  --border: #ECECE7;
+  --border-strong: #D9D9D2;
+  --border-focus: #3550E0;
+
+  /* Foreground */
+  --fg: #14161A;
+  --fg-2: #54585F;
+  --fg-3: #898E96;
+  --fg-on-accent: #FFFFFF;
+
+  /* Accent — muted blue */
+  --accent: #3550E0;
+  --accent-hover: #2D45C8;
+  --accent-press: #2638B0;
+  --accent-soft: #EAEEFC;
+  --accent-soft-2: #DCE3F9;
+  --accent-ring: rgba(53, 80, 224, 0.22);
+
+  /* Semantic */
+  --success: #1F8A52;
+  --success-soft: #E6F2EB;
+  --warning: #B36A12;
+  --warning-soft: #FAF0DD;
+  --danger: #C13838;
+  --danger-soft: #FBE9E9;
+  --info: #2F6FB8;
+  --info-soft: #E6EFF8;
+
+  /* Chart palette */
+  --chart-1: #3550E0;
+  --chart-2: #6E83F0;
+  --chart-3: #B0BCF6;
+  --chart-4: #1F8A52;
+  --chart-5: #B36A12;
+
+  /* Elevation */
+  --shadow-xs: 0 1px 0 rgba(20, 22, 26, 0.04);
+  --shadow-sm: 0 1px 2px rgba(20, 22, 26, 0.05), 0 1px 0 rgba(20, 22, 26, 0.02);
+  --shadow-md: 0 4px 12px -2px rgba(20, 22, 26, 0.08), 0 2px 4px -2px rgba(20, 22, 26, 0.04);
+  --shadow-lg: 0 16px 32px -8px rgba(20, 22, 26, 0.12), 0 4px 8px -4px rgba(20, 22, 26, 0.06);
+  --shadow-pop: 0 24px 48px -12px rgba(20, 22, 26, 0.18), 0 8px 16px -8px rgba(20, 22, 26, 0.08);
+
+  /* Shell — frame behind the panels, and the panels themselves */
+  --frame: #E9E9E4;
+  --panel: #FBFBF9;
+}
+
+[data-theme="dark"] {
+  --bg-canvas: #0E0F12;
+  --bg-surface: #16181C;
+  --bg-subtle: #1C1F24;
+  --bg-sunken: #0A0B0E;
+  --bg-overlay: rgba(0, 0, 0, 0.6);
+
+  --border: #23262C;
+  --border-strong: #2E3138;
+  --border-focus: #6E83F0;
+
+  --fg: #ECEDEF;
+  --fg-2: #9DA2AB;
+  --fg-3: #6B7079;
+  --fg-on-accent: #FFFFFF;
+
+  --accent: #6E83F0;
+  --accent-hover: #8194F3;
+  --accent-press: #5A71EC;
+  --accent-soft: #1B2244;
+  --accent-soft-2: #232C58;
+  --accent-ring: rgba(110, 131, 240, 0.30);
+
+  --success: #3FB87D;
+  --success-soft: #15291F;
+  --warning: #E0995E;
+  --warning-soft: #2A1F0F;
+  --danger: #E76B6B;
+  --danger-soft: #2A1414;
+  --info: #6FA8E6;
+  --info-soft: #14202D;
+
+  --chart-1: #6E83F0;
+  --chart-2: #8FA1F4;
+  --chart-3: #4C5FB8;
+  --chart-4: #3FB87D;
+  --chart-5: #E0995E;
+
+  --shadow-xs: 0 1px 0 rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.45), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 16px 32px -8px rgba(0, 0, 0, 0.5), 0 4px 8px -4px rgba(0, 0, 0, 0.3);
+  --shadow-pop: 0 24px 48px -12px rgba(0, 0, 0, 0.6), 0 8px 16px -8px rgba(0, 0, 0, 0.4);
+
+  /* Shell */
+  --frame: #060708;
+  --panel: #111216;
+}
+
+:root {
+  /* Type scale */
+  --font-display: "Chillax", "Inter", "Neue Haas Grotesk", "Helvetica Neue", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, monospace;
+
+  --text-xs: 11px;
+  --text-sm: 12.5px;
+  --text-base: 14px;
+  --text-md: 15px;
+  --text-lg: 17px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 30px;
+  --text-4xl: 38px;
+  --text-5xl: 52px;
+  --text-6xl: 72px;
+
+  /* Refined scale — semantic sizes used across the app (see DESIGN_SYSTEM.md
+     "Refined scale"). The --text-* scale above stays for legacy pages. */
+  --type-body: 13px;
+  --type-meta: 12px;
+  --type-label: 11px;
+  --type-card-title: 13px;
+
+  --leading-tight: 1.1;
+  --leading-snug: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65;
+
+  --tracking-tight: -0.02em;
+  --tracking-snug: -0.012em;
+  --tracking-normal: -0.005em;
+  --tracking-wide: 0.04em;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* Spacing — 4px base */
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* Radius */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-full: 999px;
+  --shell-radius: 16px;
+  --shell-inset: 18px;    /* desktop: frame padding 8+8 and the main panel border 1+1 */
+  --surface-radius: 14px; /* cards, menus, popovers */
+  --item-radius: 8px;     /* rows/items inside a surface */
+
+  /* Sidebar dims */
+  --sidebar-w: 240px;
+  --rail-w: 56px;
+  --pane-w: 240px;
+  --topbar-h: 52px;
+
+  /* Content widths */
+  --content-max-w: 1280px;
+  --dialog-max-w: 640px;
+
+  /* Mobile */
+  --bp-md: 768px;
+  --tab-h: 56px;
+  --touch-min: 44px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 320ms;
+}

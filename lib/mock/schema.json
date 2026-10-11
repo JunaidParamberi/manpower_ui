@@ -1,0 +1,5153 @@
+{
+  "profiles": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false
+      },
+      {
+        "name": "full_name",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "company_name",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "vat_registered",
+        "type": "boolean",
+        "kind": "bool",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "false"
+      },
+      {
+        "name": "vat_number",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "address_line1",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "address_line2",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "address_city",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "address_region",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "address_postal_code",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "address_country",
+        "type": "char(2)",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "brand_kit_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "onboarding_brand_skipped",
+        "type": "boolean",
+        "kind": "bool",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "false"
+      },
+      {
+        "name": "onboarding_completed_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "plan_tier",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'free'"
+      },
+      {
+        "name": "default_tax_mode",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'none'"
+      },
+      {
+        "name": "default_tax_rate",
+        "type": "numeric(5,2)",
+        "kind": "numeric",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "0"
+      },
+      {
+        "name": "gstin",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "vat_reg_no",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "upi_id",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "default_tds_rate",
+        "type": "numeric(5,2)",
+        "kind": "numeric",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "0"
+      },
+      {
+        "name": "terms_accepted_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "terms_version",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "privacy_accepted_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "privacy_version",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "cookie_analytics",
+        "type": "boolean",
+        "kind": "bool",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "false"
+      },
+      {
+        "name": "cookie_marketing",
+        "type": "boolean",
+        "kind": "bool",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "false"
+      },
+      {
+        "name": "cookie_updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "notification_email_prefs",
+        "type": "jsonb",
+        "kind": "json",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'{}'::jsonb"
+      },
+      {
+        "name": "notification_email_updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "active_thread_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_id_fkey",
+        "columns": [
+          "id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "brand_kits_brand_kit_id_fkey",
+        "columns": [
+          "brand_kit_id"
+        ],
+        "refTable": "brand_kits",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "ai_threads_active_thread_id_fkey",
+        "columns": [
+          "active_thread_id"
+        ],
+        "refTable": "ai_threads",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "brand_kits": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "logo_url",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "primary_color",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'#0a0a0a'"
+      },
+      {
+        "name": "secondary_color",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'#fafafa'"
+      },
+      {
+        "name": "font",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'Inter'"
+      },
+      {
+        "name": "email_signature",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "clients": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "email",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "phone",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "company",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "address",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "currency",
+        "type": "char(3)",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "notes",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "health_score",
+        "type": "smallint",
+        "kind": "int",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "contact_name",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "portal_token",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "website",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "billing_email",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "tax_id",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "payment_terms_days",
+        "type": "integer",
+        "kind": "int",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "relationship_status",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'active'"
+      },
+      {
+        "name": "lead_source",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "preferred_contact_method",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "timezone",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "tags",
+        "type": "text[]",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'{}'"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "projects": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "client_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "title",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "budget",
+        "type": "numeric(14, 2)",
+        "kind": "numeric",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "spent",
+        "type": "numeric(14, 2)",
+        "kind": "numeric",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "start_date",
+        "type": "date",
+        "kind": "date",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "deadline",
+        "type": "date",
+        "kind": "date",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "hourly_rate",
+        "type": "numeric(10, 2)",
+        "kind": "numeric",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "clients_client_id_fkey",
+        "columns": [
+          "client_id"
+        ],
+        "refTable": "clients",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "tasks": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "project_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "title",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "due_date",
+        "type": "date",
+        "kind": "date",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "priority",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'medium'"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "labels",
+        "type": "text[]",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'{}'"
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "start_date",
+        "type": "date",
+        "kind": "date",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "completed_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "estimated_minutes",
+        "type": "integer",
+        "kind": "int",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "sort_order",
+        "type": "integer",
+        "kind": "int",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "0"
+      },
+      {
+        "name": "client_visible",
+        "type": "boolean",
+        "kind": "bool",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "false"
+      },
+      {
+        "name": "parent_task_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "milestone_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "projects_project_id_fkey",
+        "columns": [
+          "project_id"
+        ],
+        "refTable": "projects",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "tasks_parent_task_id_fkey",
+        "columns": [
+          "parent_task_id"
+        ],
+        "refTable": "tasks",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "project_milestones_milestone_id_fkey",
+        "columns": [
+          "milestone_id"
+        ],
+        "refTable": "project_milestones",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "time_entries": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "project_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "task_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "started_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "ended_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "duration_seconds",
+        "type": "integer",
+        "kind": "int",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "billed",
+        "type": "boolean",
+        "kind": "bool",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "false"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "paused_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "total_paused_seconds",
+        "type": "integer",
+        "kind": "int",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "0"
+      },
+      {
+        "name": "invoice_line_item_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "projects_project_id_fkey",
+        "columns": [
+          "project_id"
+        ],
+        "refTable": "projects",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "tasks_task_id_fkey",
+        "columns": [
+          "task_id"
+        ],
+        "refTable": "tasks",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "line_items_invoice_line_item_id_fkey",
+        "columns": [
+          "invoice_line_item_id"
+        ],
+        "refTable": "line_items",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "documents": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "client_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "project_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "type",
+        "type": "public.document_type",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'other'"
+      },
+      {
+        "name": "status",
+        "type": "public.document_status",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'draft'"
+      },
+      {
+        "name": "title",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "content_json",
+        "type": "jsonb",
+        "kind": "json",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'{}'::jsonb"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "pdf_url",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "sent_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "viewed_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "signed_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "invoice_number",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "due_date",
+        "type": "date",
+        "kind": "date",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "payment_terms",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "notes_footer",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "paid_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "pay_token",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false,
+        "default": "encode(gen_random_bytes(24), 'hex')"
+      },
+      {
+        "name": "quote_number",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "valid_until",
+        "type": "date",
+        "kind": "date",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "approval_token",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false,
+        "default": "NULL"
+      },
+      {
+        "name": "approved_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "declined_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "approval_message",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "proposal_number",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "issued_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "currency",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'USD'"
+      },
+      {
+        "name": "receipt_number",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "source_document_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "payment_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "lpo_number",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "lpo_validity_date",
+        "type": "date",
+        "kind": "date",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "lpo_amount",
+        "type": "numeric(12, 2)",
+        "kind": "numeric",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "lpo_pdf_url",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "lpo_reference_number",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "proposal_content",
+        "type": "jsonb",
+        "kind": "json",
+        "notNull": false,
+        "pk": false,
+        "identity": false,
+        "default": "NULL"
+      },
+      {
+        "name": "approval_otp",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "approval_otp_expires_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "approved_by_email",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "approval_recipient_email",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "deleted_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "internal_notes",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "void_reason",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "tax_mode",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'none'"
+      },
+      {
+        "name": "tax_rate",
+        "type": "numeric(5,2)",
+        "kind": "numeric",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "0"
+      },
+      {
+        "name": "fx_rate",
+        "type": "numeric(18,8)",
+        "kind": "numeric",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "tds_enabled",
+        "type": "boolean",
+        "kind": "bool",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "false"
+      },
+      {
+        "name": "tds_rate",
+        "type": "numeric(5,2)",
+        "kind": "numeric",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "0"
+      },
+      {
+        "name": "tds_certificate_url",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "recurring_invoice_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "title_is_auto",
+        "type": "boolean",
+        "kind": "bool",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "false"
+      },
+      {
+        "name": "approval_link_sent_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "clients_client_id_fkey",
+        "columns": [
+          "client_id"
+        ],
+        "refTable": "clients",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "projects_project_id_fkey",
+        "columns": [
+          "project_id"
+        ],
+        "refTable": "projects",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "documents_source_document_id_fkey",
+        "columns": [
+          "source_document_id"
+        ],
+        "refTable": "documents",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "payments_payment_id_fkey",
+        "columns": [
+          "payment_id"
+        ],
+        "refTable": "payments",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "recurring_invoices_recurring_invoice_id_fkey",
+        "columns": [
+          "recurring_invoice_id"
+        ],
+        "refTable": "recurring_invoices",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "document_templates": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "type",
+        "type": "public.document_type",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'other'"
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "content_json",
+        "type": "jsonb",
+        "kind": "json",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'{}'::jsonb"
+      },
+      {
+        "name": "is_system",
+        "type": "boolean",
+        "kind": "bool",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "false"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": [
+      [
+        "type",
+        "name"
+      ]
+    ]
+  },
+  "line_items": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "document_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "''"
+      },
+      {
+        "name": "quantity",
+        "type": "numeric(10,2)",
+        "kind": "numeric",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "1"
+      },
+      {
+        "name": "unit_price",
+        "type": "numeric(10,2)",
+        "kind": "numeric",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "0"
+      },
+      {
+        "name": "tax_rate",
+        "type": "numeric(5,2)",
+        "kind": "numeric",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "0"
+      },
+      {
+        "name": "sort_order",
+        "type": "int",
+        "kind": "int",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "0"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "hsn_sac_code",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "notes",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "documents_document_id_fkey",
+        "columns": [
+          "document_id"
+        ],
+        "refTable": "documents",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "subscriptions": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "lemon_squeezy_id",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "plan",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'free'"
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'active'"
+      },
+      {
+        "name": "current_period_end",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "ls_customer_id",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "ls_variant_id",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "customer_portal_url",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": [
+      [
+        "user_id"
+      ]
+    ]
+  },
+  "expenses": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "project_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "category",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "amount",
+        "type": "numeric(12, 2)",
+        "kind": "numeric",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "currency",
+        "type": "char(3)",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'USD'"
+      },
+      {
+        "name": "date",
+        "type": "date",
+        "kind": "date",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "vendor",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "notes",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "receipt_url",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "receipt_urls",
+        "type": "jsonb",
+        "kind": "json",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'[]'::jsonb"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "projects_project_id_fkey",
+        "columns": [
+          "project_id"
+        ],
+        "refTable": "projects",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "document_sequences": {
+    "columns": [
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": true,
+        "identity": false
+      },
+      {
+        "name": "doc_type",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": true,
+        "identity": false
+      },
+      {
+        "name": "last_value",
+        "type": "integer",
+        "kind": "int",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "0"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": [
+      [
+        "user_id",
+        "doc_type"
+      ]
+    ]
+  },
+  "notifications": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "type",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "payload",
+        "type": "jsonb",
+        "kind": "json",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'{}'::jsonb"
+      },
+      {
+        "name": "read_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "action_taken_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "payments": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "document_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "amount",
+        "type": "numeric(12,2)",
+        "kind": "numeric",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "0"
+      },
+      {
+        "name": "currency",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'USD'"
+      },
+      {
+        "name": "method",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'bank_transfer'"
+      },
+      {
+        "name": "reference",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "notes",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "paid_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "provider",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'manual'"
+      },
+      {
+        "name": "external_id",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "fx_rate",
+        "type": "numeric(18,8)",
+        "kind": "numeric",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "documents_document_id_fkey",
+        "columns": [
+          "document_id"
+        ],
+        "refTable": "documents",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": [
+      [
+        "user_id",
+        "provider",
+        "external_id"
+      ]
+    ]
+  },
+  "invoice_adjustments": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "document_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "type",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "amount",
+        "type": "numeric(12,2)",
+        "kind": "numeric",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "reason",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "documents_document_id_fkey",
+        "columns": [
+          "document_id"
+        ],
+        "refTable": "documents",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "pinned_items": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "item_type",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "item_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "item_label",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "item_href",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "position",
+        "type": "int",
+        "kind": "int",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "0"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": [
+      [
+        "user_id",
+        "item_type",
+        "item_id"
+      ]
+    ]
+  },
+  "task_comments": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "task_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "body",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "client_visible",
+        "type": "boolean",
+        "kind": "bool",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "false"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "tasks_task_id_fkey",
+        "columns": [
+          "task_id"
+        ],
+        "refTable": "tasks",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "project_milestones": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "project_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "title",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'upcoming'"
+      },
+      {
+        "name": "due_date",
+        "type": "date",
+        "kind": "date",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "sort_order",
+        "type": "integer",
+        "kind": "int",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "0"
+      },
+      {
+        "name": "client_visible",
+        "type": "boolean",
+        "kind": "bool",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "false"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "projects_project_id_fkey",
+        "columns": [
+          "project_id"
+        ],
+        "refTable": "projects",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "project_templates": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "is_system",
+        "type": "boolean",
+        "kind": "bool",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "false"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "project_template_milestones": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "template_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "title",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "sort_order",
+        "type": "integer",
+        "kind": "int",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "0"
+      },
+      {
+        "name": "client_visible",
+        "type": "boolean",
+        "kind": "bool",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "true"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "project_templates_template_id_fkey",
+        "columns": [
+          "template_id"
+        ],
+        "refTable": "project_templates",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "project_template_tasks": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "template_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "milestone_template_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "title",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "estimated_minutes",
+        "type": "integer",
+        "kind": "int",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "sort_order",
+        "type": "integer",
+        "kind": "int",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "0"
+      },
+      {
+        "name": "client_visible",
+        "type": "boolean",
+        "kind": "bool",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "false"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "project_templates_template_id_fkey",
+        "columns": [
+          "template_id"
+        ],
+        "refTable": "project_templates",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "project_template_milestones_milestone_template_id_fkey",
+        "columns": [
+          "milestone_template_id"
+        ],
+        "refTable": "project_template_milestones",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "document_audit_log": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "document_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "field",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "old_value",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "new_value",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "changed_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "documents_document_id_fkey",
+        "columns": [
+          "document_id"
+        ],
+        "refTable": "documents",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "services": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "default_rate",
+        "type": "numeric(12, 4)",
+        "kind": "numeric",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "0"
+      },
+      {
+        "name": "default_tax_mode",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'none'"
+      },
+      {
+        "name": "default_tax_rate",
+        "type": "numeric(5, 2)",
+        "kind": "numeric",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "0"
+      },
+      {
+        "name": "hsn_sac_code",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "archived",
+        "type": "boolean",
+        "kind": "bool",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "false"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "service_type",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'service' constraint services_type_valid"
+      },
+      {
+        "name": "unit",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'item' constraint services_unit_valid"
+      },
+      {
+        "name": "sku",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "default_qty",
+        "type": "numeric(12, 4)",
+        "kind": "numeric",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "1"
+      },
+      {
+        "name": "cost_price",
+        "type": "numeric(12, 4)",
+        "kind": "numeric",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "recurring_invoices": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "client_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "project_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "title",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'active'"
+      },
+      {
+        "name": "interval",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "interval_count",
+        "type": "integer",
+        "kind": "int",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "1"
+      },
+      {
+        "name": "start_date",
+        "type": "date",
+        "kind": "date",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "next_run_at",
+        "type": "date",
+        "kind": "date",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "last_run_at",
+        "type": "date",
+        "kind": "date",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "end_date",
+        "type": "date",
+        "kind": "date",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "occurrences_limit",
+        "type": "integer",
+        "kind": "int",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "auto_send",
+        "type": "boolean",
+        "kind": "bool",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "false"
+      },
+      {
+        "name": "net_days",
+        "type": "integer",
+        "kind": "int",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "7"
+      },
+      {
+        "name": "currency",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'USD'"
+      },
+      {
+        "name": "tax_mode",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'none'"
+      },
+      {
+        "name": "tax_rate",
+        "type": "numeric(5, 2)",
+        "kind": "numeric",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "0"
+      },
+      {
+        "name": "discount_type",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'percent'"
+      },
+      {
+        "name": "discount_value",
+        "type": "numeric(12, 2)",
+        "kind": "numeric",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "0"
+      },
+      {
+        "name": "notes_footer",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "payment_terms",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "line_items",
+        "type": "jsonb",
+        "kind": "json",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'[]'::jsonb"
+      },
+      {
+        "name": "occurrences_count",
+        "type": "integer",
+        "kind": "int",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "0"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "source_document_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "clients_client_id_fkey",
+        "columns": [
+          "client_id"
+        ],
+        "refTable": "clients",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "projects_project_id_fkey",
+        "columns": [
+          "project_id"
+        ],
+        "refTable": "projects",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "documents_source_document_id_fkey",
+        "columns": [
+          "source_document_id"
+        ],
+        "refTable": "documents",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": [
+      [
+        "source_document_id"
+      ]
+    ]
+  },
+  "recurring_invoice_runs": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "recurring_invoice_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "document_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "period_start",
+        "type": "date",
+        "kind": "date",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "period_end",
+        "type": "date",
+        "kind": "date",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'generated'"
+      },
+      {
+        "name": "error",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "recurring_invoices_recurring_invoice_id_fkey",
+        "columns": [
+          "recurring_invoice_id"
+        ],
+        "refTable": "recurring_invoices",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "documents_document_id_fkey",
+        "columns": [
+          "document_id"
+        ],
+        "refTable": "documents",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "consent_log": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "consent_type",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "action",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "policy_version",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "metadata",
+        "type": "jsonb",
+        "kind": "json",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "ai_actions": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "agent",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "prompt_hash",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "content_campaigns": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "client_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "goal",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "''"
+      },
+      {
+        "name": "start_date",
+        "type": "date",
+        "kind": "date",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "end_date",
+        "type": "date",
+        "kind": "date",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "clients_client_id_fkey",
+        "columns": [
+          "client_id"
+        ],
+        "refTable": "clients",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "content_posts": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "client_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "campaign_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "title",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "''"
+      },
+      {
+        "name": "platform",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "''"
+      },
+      {
+        "name": "caption",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "''"
+      },
+      {
+        "name": "hashtags",
+        "type": "text[]",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'{}'"
+      },
+      {
+        "name": "media",
+        "type": "jsonb",
+        "kind": "json",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'[]'"
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'idea'"
+      },
+      {
+        "name": "scheduled_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "clients_client_id_fkey",
+        "columns": [
+          "client_id"
+        ],
+        "refTable": "clients",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "content_campaigns_campaign_id_fkey",
+        "columns": [
+          "campaign_id"
+        ],
+        "refTable": "content_campaigns",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "project_digests": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "digest_date",
+        "type": "date",
+        "kind": "date",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "facts",
+        "type": "jsonb",
+        "kind": "json",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "narrative",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "actions",
+        "type": "jsonb",
+        "kind": "json",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'[]'::jsonb"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": [
+      [
+        "user_id",
+        "digest_date"
+      ]
+    ]
+  },
+  "follow_ups": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "trigger_type",
+        "type": "public.follow_up_trigger",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "subject_type",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "subject_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "client_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "rung",
+        "type": "smallint",
+        "kind": "int",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "0"
+      },
+      {
+        "name": "status",
+        "type": "public.follow_up_status",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'pending'"
+      },
+      {
+        "name": "facts",
+        "type": "jsonb",
+        "kind": "json",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'{}'::jsonb"
+      },
+      {
+        "name": "sent_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "dismissed_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "clients_client_id_fkey",
+        "columns": [
+          "client_id"
+        ],
+        "refTable": "clients",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": [
+      [
+        "user_id",
+        "subject_id",
+        "trigger_type",
+        "rung"
+      ]
+    ]
+  },
+  "client_health_snapshots": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "client_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "snapshot_date",
+        "type": "date",
+        "kind": "date",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "score",
+        "type": "smallint",
+        "kind": "int",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "band",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "facts",
+        "type": "jsonb",
+        "kind": "json",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'{}'::jsonb"
+      },
+      {
+        "name": "signals",
+        "type": "jsonb",
+        "kind": "json",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'[]'::jsonb"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "clients_client_id_fkey",
+        "columns": [
+          "client_id"
+        ],
+        "refTable": "clients",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": [
+      [
+        "user_id",
+        "client_id",
+        "snapshot_date"
+      ]
+    ]
+  },
+  "ai_threads": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "messages",
+        "type": "jsonb",
+        "kind": "json",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'[]'::jsonb"
+      },
+      {
+        "name": "pending_tool",
+        "type": "jsonb",
+        "kind": "json",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "mode",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'ask'"
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'idle'"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "title",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "is_archived",
+        "type": "boolean",
+        "kind": "bool",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "false"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "ai_messages": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "thread_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "role",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "content",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "tool_calls",
+        "type": "jsonb",
+        "kind": "json",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "seq",
+        "type": "bigint",
+        "kind": "int",
+        "notNull": false,
+        "pk": false,
+        "identity": true
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "ai_threads_thread_id_fkey",
+        "columns": [
+          "thread_id"
+        ],
+        "refTable": "ai_threads",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "dashboard_dismissals": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "item_type",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "item_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "snoozed_until",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "dismissed_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": [
+      [
+        "user_id",
+        "item_type",
+        "item_id"
+      ]
+    ]
+  },
+  "api_keys": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "key_prefix",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "type",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'app'"
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "''"
+      },
+      {
+        "name": "key_hash",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "unique": true
+      },
+      {
+        "name": "scopes",
+        "type": "text[]",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'{read"
+      },
+      {
+        "name": "last_used_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "expires_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "revoked_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "tools",
+        "type": "jsonb",
+        "kind": "json",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'{ \"list_entities\": true"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "mcp_oauth_codes": {
+    "columns": [
+      {
+        "name": "code",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": true,
+        "identity": false
+      },
+      {
+        "name": "api_key_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "redirect_uri",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "code_challenge",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "code_challenge_method",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'S256'"
+      },
+      {
+        "name": "expires_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "used_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "connection_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "api_keys_api_key_id_fkey",
+        "columns": [
+          "api_key_id"
+        ],
+        "refTable": "api_keys",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "mcp_connections_connection_id_fkey",
+        "columns": [
+          "connection_id"
+        ],
+        "refTable": "mcp_connections",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "mcp_oauth_clients": {
+    "columns": [
+      {
+        "name": "client_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "client_name",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "redirect_uris",
+        "type": "text[]",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      }
+    ],
+    "foreignKeys": [],
+    "uniqueConstraints": []
+  },
+  "mcp_connections": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": true,
+        "identity": false,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "client_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "client_name",
+        "type": "text",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "scopes",
+        "type": "text[]",
+        "kind": "text",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "'{read"
+      },
+      {
+        "name": "refresh_token_hash",
+        "type": "text",
+        "kind": "text",
+        "notNull": false,
+        "pk": false,
+        "identity": false,
+        "unique": true
+      },
+      {
+        "name": "refresh_token_expires_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "pk": false,
+        "identity": false,
+        "default": "now()"
+      },
+      {
+        "name": "last_used_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      },
+      {
+        "name": "revoked_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": false,
+        "pk": false,
+        "identity": false
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "auth.users_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "auth.users",
+        "refColumns": [
+          "id"
+        ]
+      },
+      {
+        "name": "mcp_oauth_clients_client_id_fkey",
+        "columns": [
+          "client_id"
+        ],
+        "refTable": "mcp_oauth_clients",
+        "refColumns": [
+          "client_id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "nav_layouts": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": true,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true
+      },
+      {
+        "name": "item_order",
+        "type": "jsonb",
+        "kind": "json",
+        "notNull": true,
+        "default": "'[]'::jsonb"
+      },
+      {
+        "name": "hidden_items",
+        "type": "jsonb",
+        "kind": "json",
+        "notNull": true,
+        "default": "'[]'::jsonb"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "default": "now()"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "nav_layouts_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "profiles",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  },
+  "dashboard_layouts": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true,
+        "pk": true,
+        "default": "gen_random_uuid()"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "kind": "uuid",
+        "notNull": true
+      },
+      {
+        "name": "card_order",
+        "type": "jsonb",
+        "kind": "json",
+        "notNull": true,
+        "default": "'[]'::jsonb"
+      },
+      {
+        "name": "hidden_cards",
+        "type": "jsonb",
+        "kind": "json",
+        "notNull": true,
+        "default": "'[]'::jsonb"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "default": "now()"
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamptz",
+        "kind": "timestamp",
+        "notNull": true,
+        "default": "now()"
+      }
+    ],
+    "foreignKeys": [
+      {
+        "name": "dashboard_layouts_user_id_fkey",
+        "columns": [
+          "user_id"
+        ],
+        "refTable": "profiles",
+        "refColumns": [
+          "id"
+        ]
+      }
+    ],
+    "uniqueConstraints": []
+  }
+}
