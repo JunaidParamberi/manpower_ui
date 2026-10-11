@@ -8,6 +8,15 @@ create / edit / delete persists locally.
 
 Extracted from the full-stack app into a self-contained UI build.
 
+## Documentation
+
+Full docs live in [`docs/`](docs/README.md):
+
+- **[Getting started](docs/getting-started.md)** — install, run, sign in, reset the demo
+- **[User guide](docs/user-guide.md)** — every screen, panel and shortcut
+- **[Architecture](docs/architecture.md)** — how the mock layer works, and how to extend it
+- **[Development](docs/development.md)** — scripts, tests, Storybook, patterns
+
 ## Stack
 
 - **Framework:** Next.js 15 (App Router), React 19, TypeScript
