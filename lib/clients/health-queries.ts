@@ -3,7 +3,7 @@
 import { unstable_cache } from "next/cache";
 
 import { getServerContext } from "@/lib/supabase/get-server-context";
-import type { HealthBand, HealthSignal } from "@/lib/clients/health-facts";
+import { toHealthSignals, type HealthBand, type HealthSignal } from "@/lib/clients/health-facts";
 
 export type ClientHealthSnapshotRow = {
   id: string;
@@ -50,7 +50,7 @@ const _cachedGetLatestClientHealth = unstable_cache(
       score: data.score,
       band: data.band as HealthBand,
       facts: (data.facts ?? {}) as Record<string, unknown>,
-      signals: (data.signals ?? []) as HealthSignal[],
+      signals: toHealthSignals(data.signals),
       createdAt: data.created_at,
     };
   },
@@ -112,7 +112,7 @@ const _cachedGetAtRiskClients = unstable_cache(
       .map((row) => {
         const clientRel = row.clients;
         const client = Array.isArray(clientRel) ? (clientRel[0] ?? null) : clientRel;
-        const signals = (row.signals ?? []) as HealthSignal[];
+        const signals = toHealthSignals(row.signals);
 
         return {
           clientId: row.client_id,

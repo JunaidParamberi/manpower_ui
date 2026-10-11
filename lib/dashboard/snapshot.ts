@@ -16,6 +16,7 @@ import {
 import { buildMonthlyRevenueBuckets } from "@/lib/finance/revenue-calc";
 import type { RevenueRangeId } from "@/lib/finance/types";
 import { getServerContext } from "@/lib/supabase/get-server-context";
+import { toHealthSignals } from "@/lib/clients/health-facts";
 import { deriveBrief } from "@/lib/dashboard/derive/derive-brief";
 import { deriveClients, type LiveHealthInput } from "@/lib/dashboard/derive/derive-clients";
 import { deriveMoney } from "@/lib/dashboard/derive/derive-money";
@@ -437,7 +438,7 @@ const _cachedSnapshot = unstable_cache(
         clientName: row.clients?.name ?? "Client",
         score: row.score,
         band: row.band as never,
-        topSignal: ((row.signals ?? []) as never[])[0] ?? null,
+        topSignal: toHealthSignals(row.signals)[0] ?? null,
       })),
       liveInputs,
     });

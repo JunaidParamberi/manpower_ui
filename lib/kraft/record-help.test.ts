@@ -106,6 +106,18 @@ describe("clientHelp", () => {
     expect(issueCount(help)).toBe(0);
     expect(help.items.map((i) => i.id)).toEqual(["summary", "new-quote"]);
   });
+
+  it("ignores legacy snapshot rows that aren't real signals", () => {
+    // Old seeded snapshots stored bare strings, which used to crash the page.
+    const help = clientHelp({
+      name: "Bright Apps Ltd",
+      contactName: null,
+      healthScore: 60,
+      signals: ["invoice_overdue", "no_activity_14d"] as never,
+    });
+    expect(issueCount(help)).toBe(0);
+    expect(help.items.map((i) => i.id)).toEqual(["summary", "new-quote"]);
+  });
 });
 
 describe("projectHelp", () => {

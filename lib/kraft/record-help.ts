@@ -8,7 +8,7 @@
  * where the assistant can't tell from the URL which one is open.
  */
 
-import type { HealthSignal } from "../clients/health-facts";
+import { toHealthSignals, type HealthSignal } from "../clients/health-facts";
 import { buildDigestFacts, type DigestInvoiceInput, type DigestSignal } from "../projects/digest-facts";
 import type { AiPanelMode } from "../ai-panel/types";
 
@@ -220,7 +220,10 @@ const CLIENT_SIGNAL_PROMPT: Record<HealthSignal["kind"], (c: ClientHelpInput) =>
 };
 
 export function clientHelp(input: ClientHelpInput): RecordHelp {
-  const items: RecordHelpItem[] = input.signals
+  // Snapshots come from stored JSON, so guard against rows that predate the
+  // current signal shape.
+  const signals = toHealthSignals(input.signals);
+  const items: RecordHelpItem[] = signals
     .filter((signal) => signal.severity !== "info")
     .map((signal) => ({
       id: signal.kind,
@@ -230,7 +233,7 @@ export function clientHelp(input: ClientHelpInput): RecordHelp {
       ...CLIENT_SIGNAL_PROMPT[signal.kind](input),
     }));
 
-  if (input.healthScore !== null && input.signals.length > 0) {
+  if (input.healthScore !== null && signals.length > 0) {
     items.push({
       id: "explain-health",
       tone: "idea",

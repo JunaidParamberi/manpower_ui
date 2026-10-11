@@ -252,6 +252,56 @@ export function detectNoActiveWork(
   };
 }
 
+const HEALTH_SIGNAL_KINDS: readonly HealthSignalKind[] = [
+  "overdue_invoices",
+  "slow_payer",
+  "gone_quiet",
+  "revenue_decline",
+  "stalled_pipeline",
+  "no_active_work",
+];
+
+const HEALTH_SEVERITIES: readonly HealthSeverity[] = ["info", "warning", "critical"];
+
+export function isHealthSignalKind(kind: unknown): kind is HealthSignalKind {
+  return typeof kind === "string" && (HEALTH_SIGNAL_KINDS as readonly string[]).includes(kind);
+}
+
+/** "overdue_invoices" → "Overdue invoices", for rows that lost their title. */
+function humanizeSignalKind(kind: HealthSignalKind): string {
+  const phrase = kind.replace(/_/g, " ");
+  return phrase.charAt(0).toUpperCase() + phrase.slice(1);
+}
+
+/**
+ * Snapshots are stored as JSON and cast to `HealthSignal[]` on the way out, so
+ * a row written by older code (or another writer) may not match this shape —
+ * the demo seed used to store bare strings like "invoice_overdue". Keeps the
+ * entries that are real signals and drops the rest, so callers can trust that
+ * `kind` is a known value.
+ */
+export function toHealthSignals(value: unknown): HealthSignal[] {
+  if (!Array.isArray(value)) return [];
+  const signals: HealthSignal[] = [];
+  for (const entry of value) {
+    if (typeof entry !== "object" || entry === null) continue;
+    const candidate = entry as { kind?: unknown; severity?: unknown; title?: unknown; detail?: unknown };
+    if (!isHealthSignalKind(candidate.kind)) continue;
+    signals.push({
+      kind: candidate.kind,
+      severity: HEALTH_SEVERITIES.includes(candidate.severity as HealthSeverity)
+        ? (candidate.severity as HealthSeverity)
+        : "warning",
+      title:
+        typeof candidate.title === "string" && candidate.title.trim() !== ""
+          ? candidate.title
+          : humanizeSignalKind(candidate.kind),
+      detail: typeof candidate.detail === "string" ? candidate.detail : "",
+    });
+  }
+  return signals;
+}
+
 export function scoreClientHealth(signals: HealthSignal[]): { score: number; band: HealthBand } {
   const raw = signals.reduce((sum, signal) => sum + SEVERITY_WEIGHT[signal.severity], 0);
   const score = Math.max(0, 100 - raw);

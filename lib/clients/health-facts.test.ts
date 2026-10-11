@@ -9,6 +9,7 @@ import {
   detectSlowPayer,
   detectStalledPipeline,
   scoreClientHealth,
+  toHealthSignals,
   type HealthBand,
   type HealthDocumentTouchInput,
   type HealthInvoiceInput,
@@ -245,6 +246,29 @@ describe("detectNoActiveWork", () => {
       { id: "1", status: "sent", dueDate: "2026-08-01", total: 100, paidAt: null, daysToPay: null },
     ];
     expect(detectNoActiveWork([], invoices)).toBeNull();
+  });
+});
+
+describe("toHealthSignals", () => {
+  it("keeps well-formed signals and repairs missing severity, title and detail", () => {
+    expect(
+      toHealthSignals([
+        { kind: "gone_quiet", severity: "critical", title: "Gone quiet", detail: "91 days." },
+        { kind: "overdue_invoices" },
+        "invoice_overdue",
+        null,
+        { kind: "invented_kind", severity: "warning", title: "?", detail: "" },
+      ]),
+    ).toEqual([
+      { kind: "gone_quiet", severity: "critical", title: "Gone quiet", detail: "91 days." },
+      { kind: "overdue_invoices", severity: "warning", title: "Overdue invoices", detail: "" },
+    ]);
+  });
+
+  it("returns an empty list for legacy rows and non-arrays", () => {
+    expect(toHealthSignals(["invoice_overdue", "no_activity_14d"])).toEqual([]);
+    expect(toHealthSignals(null)).toEqual([]);
+    expect(toHealthSignals(undefined)).toEqual([]);
   });
 });
 

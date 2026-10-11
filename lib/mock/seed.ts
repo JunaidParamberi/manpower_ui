@@ -974,6 +974,18 @@ export function seedWorkspace(options: SeedOptions): void {
     [4, 71, "healthy", 8],
   ];
   for (const [clientIndex, score, band, daysAgo] of healthSeeds) {
+    // Signals must be real HealthSignal rows (kind/severity/title/detail):
+    // the client page maps each `kind` to a prompt and renders title/detail.
+    const signals =
+      band === "needs_attention"
+        ? [
+            { kind: "overdue_invoices", severity: "warning", title: "Overdue invoices", detail: "2 unpaid invoices, oldest 18 days overdue." },
+            { kind: "gone_quiet", severity: "warning", title: "Gone quiet", detail: "No documents, project activity, or time entries in 56 days." },
+          ]
+        : score > 85
+          ? []
+          : [{ kind: "slow_payer", severity: "info", title: "Slow payer", detail: "Averaging 24 days to pay against 14-day terms." }];
+
     push("client_health_snapshots", {
       user_id: userId,
       client_id: clients[clientIndex].id,
@@ -981,12 +993,7 @@ export function seedWorkspace(options: SeedOptions): void {
       score,
       band,
       facts: { openInvoices: clientIndex % 3, lastActivityDays: daysAgo * 4 },
-      signals:
-        band === "needs_attention"
-          ? ["no_activity_14d", "invoice_overdue"]
-          : score > 85
-            ? ["paid_on_time", "active_project"]
-            : ["responsive", "steady_work"],
+      signals,
     });
   }
 
