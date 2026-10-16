@@ -76,15 +76,19 @@ export function WorkerDocumentsTab({ worker }: { worker: WorkerListRow }) {
 
   function handleUpload(slot: WorkerDocumentSlot, file: File) {
     startTransition(async () => {
-      const fd = new FormData();
-      fd.append("file", file);
-      const result = await uploadWorkerDocument(worker.id, slot, fd);
-      if (!result.ok) {
-        toast.error(result.error);
-        return;
+      try {
+        const fd = new FormData();
+        fd.append("file", file);
+        const result = await uploadWorkerDocument(worker.id, slot, fd);
+        if (!result.ok) {
+          toast.error(result.error);
+          return;
+        }
+        toast.success("Document uploaded");
+        window.location.reload();
+      } catch {
+        toast.error("Upload failed. Try a smaller file.");
       }
-      toast.success("Document uploaded");
-      window.location.reload();
     });
   }
 

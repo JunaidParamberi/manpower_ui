@@ -22,6 +22,11 @@ const nextConfig: NextConfig = {
    * that use `lib/supabase/server` + Server Components.
    */
   serverExternalPackages: ["@react-pdf/renderer"],
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "11mb",
+    },
+  },
 };
 
 export default nextConfig;
