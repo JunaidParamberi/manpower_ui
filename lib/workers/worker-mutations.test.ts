@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { revalidatePath, revalidateTag } from "next/cache";
 import { getServerContext } from "@/lib/supabase/get-server-context";
-import { createWorker, deleteWorker } from "./worker-mutations";
+import { createWorker, deleteWorker, updateWorkerStatus } from "./worker-mutations";
 
 vi.mock("next/cache", () => ({
   revalidatePath: vi.fn(),
@@ -115,5 +114,35 @@ describe("deleteWorker", () => {
   it("rejects an invalid id", async () => {
     const result = await deleteWorker("not-a-uuid");
     expect(result.ok).toBe(false);
+  });
+});
+
+describe("updateWorkerStatus", () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("rejects a status that is not a declared worker status", async () => {
+    const supabase = { from: vi.fn(() => chain({ data: null, error: null })) };
+    vi.mocked(getServerContext).mockResolvedValue({
+      supabase: supabase as never,
+      user: { id: "u1" } as never,
+    });
+    const id = "11111111-1111-4111-a111-111111111111";
+    const result = await updateWorkerStatus(id, "not-a-real-status");
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error).toBe("Invalid status.");
+    }
+  });
+
+  it("accepts a declared worker status", async () => {
+    const row = { id: "w1", user_id: "u1", status: "deployed" };
+    const supabase = { from: vi.fn(() => chain({ data: row, error: null })) };
+    vi.mocked(getServerContext).mockResolvedValue({
+      supabase: supabase as never,
+      user: { id: "u1" } as never,
+    });
+    const id = "11111111-1111-4111-a111-111111111111";
+    const result = await updateWorkerStatus(id, "deployed");
+    expect(result.ok).toBe(true);
   });
 });

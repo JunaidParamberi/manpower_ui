@@ -3,7 +3,7 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import { z } from "zod";
 import { getServerContext } from "@/lib/supabase/get-server-context";
-import { workerInputSchema } from "@/lib/validations/worker";
+import { workerInputSchema, workerStatusSchema } from "@/lib/validations/worker";
 import type { WorkerRow } from "@/types";
 
 type WorkerResult =
@@ -151,12 +151,15 @@ export async function updateWorkerStatus(id: string, status: string): Promise<Wo
   const parsedId = uuidSchema.safeParse(id);
   if (!parsedId.success) return { ok: false, error: "Invalid id" };
 
+  const parsedStatus = workerStatusSchema.safeParse(status);
+  if (!parsedStatus.success) return { ok: false, error: "Invalid status." };
+
   const { supabase, user } = await getServerContext();
   if (!user) return { ok: false, error: "Unauthenticated" };
 
   const { data, error } = await supabase
     .from("workers")
-    .update({ status })
+    .update({ status: parsedStatus.data })
     .eq("id", parsedId.data)
     .eq("user_id", user.id)
     .select()
