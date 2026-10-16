@@ -9,8 +9,10 @@ import { WORKER_STATUSES, WORKER_STATUS_LABELS } from "@/lib/validations/worker"
 import type { WorkerTab } from "@/lib/workers/worker-tab";
 import type { WorkerListRow } from "@/types";
 
+import { WorkerAccommodationTab } from "@/components/features/workers/detail/worker-accommodation-tab";
 import { WorkerDetailsTab } from "@/components/features/workers/detail/worker-details-tab";
 import { WorkerDocumentsTab } from "@/components/features/workers/detail/worker-documents-tab";
+import { WorkerTimesheetsTab } from "@/components/features/workers/detail/worker-timesheets-tab";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -55,10 +57,10 @@ export function WorkerDetailView({ worker, tab }: { worker: WorkerListRow; tab: 
             <WorkerDocumentsTab worker={worker} />
           </TabsContent>
           <TabsContent value="accommodation">
-            <div className="text-muted-foreground">Loading…</div>
+            <WorkerAccommodationTab />
           </TabsContent>
           <TabsContent value="timesheets">
-            <div className="text-muted-foreground">Loading…</div>
+            <WorkerTimesheetsTab />
           </TabsContent>
         </Tabs>
       </div>
