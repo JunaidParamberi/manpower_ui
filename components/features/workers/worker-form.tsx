@@ -3,17 +3,19 @@
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { createWorker, updateWorker } from "@/lib/workers/worker-mutations";
 import { WORKER_LIMITS, WORKER_STATUSES, WORKER_STATUS_LABELS, type WorkerInput } from "@/lib/validations/worker";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { FormDatePicker } from "@/components/shared/form-date-picker";
 import type { ProjectClientRow, SupplierRow, WorkerListRow } from "@/types";
 
 /**
@@ -80,7 +82,7 @@ export function WorkerForm(props: WorkerFormProps) {
 
   const defaults = props.mode === "edit" ? workerToFormValues(props.worker) : emptyDefaults;
 
-  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<WorkerInput>({
+  const { register, handleSubmit, watch, setValue, control, formState: { errors } } = useForm<WorkerInput>({
     defaultValues: defaults,
   });
 
@@ -196,6 +198,91 @@ export function WorkerForm(props: WorkerFormProps) {
               </SelectGroup>
             </SelectContent>
           </Select>
+        </Field>
+
+        <Field>
+          <FieldLabel htmlFor="worker-passport-number">Passport Number</FieldLabel>
+          <Input id="worker-passport-number" maxLength={WORKER_LIMITS.doc_number} {...register("passport_number")} />
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="worker-passport-expiry">Passport Expiry</FieldLabel>
+          <Controller
+            name="passport_expiry"
+            control={control}
+            render={({ field }) => (
+              <FormDatePicker id="worker-passport-expiry" value={field.value ?? ""} onChange={field.onChange} />
+            )}
+          />
+        </Field>
+
+        <Field>
+          <FieldLabel htmlFor="worker-emirates-id">Emirates ID</FieldLabel>
+          <Input id="worker-emirates-id" maxLength={WORKER_LIMITS.doc_number} {...register("emirates_id")} />
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="worker-emirates-id-expiry">Emirates ID Expiry</FieldLabel>
+          <Controller
+            name="emirates_id_expiry"
+            control={control}
+            render={({ field }) => (
+              <FormDatePicker id="worker-emirates-id-expiry" value={field.value ?? ""} onChange={field.onChange} />
+            )}
+          />
+        </Field>
+
+        <Field>
+          <FieldLabel htmlFor="worker-visa-number">Visa Number</FieldLabel>
+          <Input id="worker-visa-number" maxLength={WORKER_LIMITS.doc_number} {...register("visa_number")} />
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="worker-visa-expiry">Visa Expiry</FieldLabel>
+          <Controller
+            name="visa_expiry"
+            control={control}
+            render={({ field }) => (
+              <FormDatePicker id="worker-visa-expiry" value={field.value ?? ""} onChange={field.onChange} />
+            )}
+          />
+        </Field>
+
+        <Field>
+          <label className="flex cursor-pointer items-center gap-2 text-sm">
+            <Checkbox
+              checked={watch("medical_fit")}
+              onCheckedChange={(checked) => setValue("medical_fit", checked === true)}
+            />
+            <span className="font-medium">Medically fit</span>
+          </label>
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="worker-medical-expiry">Medical Expiry</FieldLabel>
+          <Controller
+            name="medical_expiry"
+            control={control}
+            render={({ field }) => (
+              <FormDatePicker id="worker-medical-expiry" value={field.value ?? ""} onChange={field.onChange} />
+            )}
+          />
+        </Field>
+
+        <Field>
+          <label className="flex cursor-pointer items-center gap-2 text-sm">
+            <Checkbox
+              checked={watch("has_insurance")}
+              onCheckedChange={(checked) => setValue("has_insurance", checked === true)}
+            />
+            <span className="font-medium">Has insurance</span>
+          </label>
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="worker-insurance-expiry">Insurance Expiry</FieldLabel>
+          <Controller
+            name="insurance_expiry"
+            control={control}
+            render={({ field }) => (
+              <FormDatePicker id="worker-insurance-expiry" value={field.value ?? ""} onChange={field.onChange} />
+            )}
+          />
         </Field>
 
         <Field>
