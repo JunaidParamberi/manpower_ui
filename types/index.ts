@@ -92,6 +92,115 @@ export type ClientRow = {
   updated_at: string;
 };
 
+/** Row shape for `public.suppliers`. */
+export type SupplierRow = {
+  id: string;
+  user_id: string;
+  name: string;
+  supplier_code: string | null;
+  license_number: string | null;
+  vat_number: string | null;
+  contact_name: string | null;
+  email: string | null;
+  phone: string | null;
+  website: string | null;
+  notes: string | null;
+  trade_license_document_url: string | null;
+  vat_registration_document_url: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+/** Row shape for `public.project_clients`. */
+export type ProjectClientRow = {
+  id: string;
+  user_id: string;
+  name: string;
+  client_code: string | null;
+  license_number: string | null;
+  vat_number: string | null;
+  contact_name: string | null;
+  email: string | null;
+  phone: string | null;
+  website: string | null;
+  notes: string | null;
+  trade_license_document_url: string | null;
+  vat_registration_document_url: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type WorkerStatus = "available" | "deployed" | "on_leave" | "inactive";
+
+/** Row shape for `public.workers`. */
+export type WorkerRow = {
+  id: string;
+  user_id: string;
+  employee_id: string;
+  name: string;
+  nationality: string | null;
+  trade_category: string | null;
+  status: WorkerStatus;
+  supplier_id: string | null;
+  notes: string | null;
+  passport_number: string | null;
+  passport_expiry: string | null;
+  passport_document_url: string | null;
+  passport_document_optional_url: string | null;
+  emirates_id: string | null;
+  emirates_id_expiry: string | null;
+  emirates_id_document_url: string | null;
+  emirates_id_document_optional_url: string | null;
+  visa_number: string | null;
+  visa_expiry: string | null;
+  visa_document_url: string | null;
+  visa_document_optional_url: string | null;
+  medical_fit: boolean;
+  medical_expiry: string | null;
+  has_insurance: boolean;
+  insurance_expiry: string | null;
+  photo_url: string | null;
+  workmen_compensation_document_url: string | null;
+  workmen_compensation_document_optional_url: string | null;
+  medical_insurance_card_url: string | null;
+  medical_insurance_card_optional_url: string | null;
+  noc_current_sponsor_document_url: string | null;
+  noc_client_document_url: string | null;
+  trade_license_document_url: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+/** Row shape for `public.worker_clients`. */
+export type WorkerClientRow = {
+  id: string;
+  user_id: string;
+  worker_id: string;
+  project_client_id: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type WorkerDocumentCategory = "cicpa" | "additional";
+
+/** Row shape for `public.worker_documents`. */
+export type WorkerDocumentRow = {
+  id: string;
+  user_id: string;
+  worker_id: string;
+  category: WorkerDocumentCategory;
+  label: string;
+  file_url: string;
+  created_at: string;
+  updated_at: string;
+};
+
+/** Worker row with its linked supplier name and project-client names for list/detail UI. */
+export type WorkerListRow = WorkerRow & {
+  supplier: { id: string; name: string } | null;
+  clients: { id: string; name: string }[];
+};
+
 /** Matches `projects_status_check` in `*_projects_tasks.sql`. */
 export type ProjectStatus =
   | "planning"
