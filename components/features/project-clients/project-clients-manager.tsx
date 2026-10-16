@@ -1,11 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Plus, Trash2 } from "lucide-react";
-import { useState, useTransition } from "react";
-import { toast } from "sonner";
+import { Plus } from "lucide-react";
+import { useState } from "react";
 
-import { deleteProjectClient } from "@/lib/project-clients/project-client-mutations";
+import { DeleteProjectClientButton } from "@/components/features/project-clients/delete-project-client-button";
 import { ProjectClientFormSheet } from "@/components/features/project-clients/project-client-form-sheet";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/shared/page-header";
@@ -13,21 +12,8 @@ import type { ProjectClientRow } from "@/types";
 
 export function ProjectClientsManager({ initialProjectClients }: { initialProjectClients: ProjectClientRow[] }) {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
   const [sheetOpen, setSheetOpen] = useState(false);
   const [editing, setEditing] = useState<ProjectClientRow | null>(null);
-
-  function handleDelete(projectClient: ProjectClientRow) {
-    startTransition(async () => {
-      const result = await deleteProjectClient(projectClient.id);
-      if (!result.ok) {
-        toast.error(result.error);
-        return;
-      }
-      toast.success("Project client deleted");
-      router.refresh();
-    });
-  }
 
   return (
     <div className="flex flex-col gap-6 p-6">
@@ -70,15 +56,11 @@ export function ProjectClientsManager({ initialProjectClients }: { initialProjec
                   <Button variant="ghost" size="sm" onClick={() => { setEditing(projectClient); setSheetOpen(true); }}>
                     Edit
                   </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon-sm"
-                    disabled={isPending}
-                    onClick={() => handleDelete(projectClient)}
-                    aria-label={`Delete ${projectClient.name}`}
-                  >
-                    <Trash2 className="text-destructive" />
-                  </Button>
+                  <DeleteProjectClientButton
+                    projectClientId={projectClient.id}
+                    projectClientName={projectClient.name}
+                    onDeleted={() => router.refresh()}
+                  />
                 </td>
               </tr>
             ))}

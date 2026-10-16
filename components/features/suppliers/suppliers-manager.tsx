@@ -1,11 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Plus, Trash2 } from "lucide-react";
-import { useState, useTransition } from "react";
-import { toast } from "sonner";
+import { Plus } from "lucide-react";
+import { useState } from "react";
 
-import { deleteSupplier } from "@/lib/suppliers/supplier-mutations";
+import { DeleteSupplierButton } from "@/components/features/suppliers/delete-supplier-button";
 import { SupplierFormSheet } from "@/components/features/suppliers/supplier-form-sheet";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/shared/page-header";
@@ -13,21 +12,8 @@ import type { SupplierRow } from "@/types";
 
 export function SuppliersManager({ initialSuppliers }: { initialSuppliers: SupplierRow[] }) {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
   const [sheetOpen, setSheetOpen] = useState(false);
   const [editing, setEditing] = useState<SupplierRow | null>(null);
-
-  function handleDelete(supplier: SupplierRow) {
-    startTransition(async () => {
-      const result = await deleteSupplier(supplier.id);
-      if (!result.ok) {
-        toast.error(result.error);
-        return;
-      }
-      toast.success("Supplier deleted");
-      router.refresh();
-    });
-  }
 
   return (
     <div className="flex flex-col gap-6 p-6">
@@ -70,15 +56,11 @@ export function SuppliersManager({ initialSuppliers }: { initialSuppliers: Suppl
                   <Button variant="ghost" size="sm" onClick={() => { setEditing(supplier); setSheetOpen(true); }}>
                     Edit
                   </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon-sm"
-                    disabled={isPending}
-                    onClick={() => handleDelete(supplier)}
-                    aria-label={`Delete ${supplier.name}`}
-                  >
-                    <Trash2 className="text-destructive" />
-                  </Button>
+                  <DeleteSupplierButton
+                    supplierId={supplier.id}
+                    supplierName={supplier.name}
+                    onDeleted={() => router.refresh()}
+                  />
                 </td>
               </tr>
             ))}
