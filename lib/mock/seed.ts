@@ -305,6 +305,138 @@ export function seedWorkspace(options: SeedOptions): void {
       })!,
   );
 
+  // ── Suppliers ────────────────────────────────────────────────────────
+  type SupplierSeed = {
+    name: string;
+    code: string;
+    license: string;
+    vat: string | null;
+    contact: string | null;
+    email: string | null;
+  };
+
+  const supplierSeeds: SupplierSeed[] = [
+    { name: "Jubily Power Technical Services L.L.C", code: "SUP/2026/001", license: "658443", vat: null, contact: "Ahmed Khalil", email: "ops@jubily.ae" },
+    { name: "Al Maha Manpower Services", code: "SUP/2026/002", license: "214410", vat: "TRN100221000300003", contact: "Fatima Noor", email: "contact@almaha-ms.ae" },
+    { name: "Gulf Trade Workforce Co", code: "SUP/2026/003", license: "778821", vat: null, contact: null, email: null },
+  ];
+
+  const suppliers = supplierSeeds.map(
+    (s) =>
+      push("suppliers", {
+        user_id: userId,
+        name: s.name,
+        supplier_code: s.code,
+        license_number: s.license,
+        vat_number: s.vat,
+        contact_name: s.contact,
+        email: s.email,
+        phone: null,
+        website: null,
+        notes: null,
+        trade_license_document_url: null,
+        vat_registration_document_url: null,
+      })!,
+  );
+
+  // ── Project clients ──────────────────────────────────────────────────
+  type ProjectClientSeed = { name: string; code: string; license: string };
+
+  const projectClientSeeds: ProjectClientSeed[] = [
+    { name: "G C S German Concrete Works and Building Contracting L.L.C", code: "PCL/2026/001", license: "812947" },
+    { name: "Falcon Heights Construction L.L.C", code: "PCL/2026/002", license: "905512" },
+  ];
+
+  const projectClients = projectClientSeeds.map(
+    (c) =>
+      push("project_clients", {
+        user_id: userId,
+        name: c.name,
+        client_code: c.code,
+        license_number: c.license,
+        vat_number: null,
+        contact_name: null,
+        email: null,
+        phone: null,
+        website: null,
+        notes: null,
+        trade_license_document_url: null,
+        vat_registration_document_url: null,
+      })!,
+  );
+
+  // ── Workers ───────────────────────────────────────────────────────────
+  type WorkerSeed = {
+    employeeId: string;
+    name: string;
+    nationality: string;
+    trade: string;
+    status: "available" | "deployed" | "on_leave" | "inactive";
+    supplierIdx: number;
+  };
+
+  const workerSeeds: WorkerSeed[] = [
+    { employeeId: "EMP/2026/0001", name: "Salifu Mumuni", nationality: "Ghana", trade: "Helper", status: "available", supplierIdx: 0 },
+    { employeeId: "EMP/2026/0002", name: "Ibrahim Yusuf", nationality: "Ghana", trade: "Mason", status: "deployed", supplierIdx: 0 },
+    { employeeId: "EMP/2026/0003", name: "Ramesh Kumar", nationality: "India", trade: "Electrician", status: "available", supplierIdx: 1 },
+    { employeeId: "EMP/2026/0004", name: "Suresh Patel", nationality: "India", trade: "Plumber", status: "on_leave", supplierIdx: 1 },
+    { employeeId: "EMP/2026/0005", name: "Juan Dela Cruz", nationality: "Philippines", trade: "Welder", status: "deployed", supplierIdx: 2 },
+    { employeeId: "EMP/2026/0006", name: "Mark Santos", nationality: "Philippines", trade: "Carpenter", status: "inactive", supplierIdx: 2 },
+  ];
+
+  const workers = workerSeeds.map((w) =>
+    push("workers", {
+      user_id: userId,
+      employee_id: w.employeeId,
+      name: w.name,
+      nationality: w.nationality,
+      trade_category: w.trade,
+      status: w.status,
+      supplier_id: suppliers[w.supplierIdx].id,
+      notes: null,
+      passport_number: null,
+      passport_expiry: null,
+      passport_document_url: null,
+      passport_document_optional_url: null,
+      emirates_id: null,
+      emirates_id_expiry: null,
+      emirates_id_document_url: null,
+      emirates_id_document_optional_url: null,
+      visa_number: null,
+      visa_expiry: null,
+      visa_document_url: null,
+      visa_document_optional_url: null,
+      medical_fit: false,
+      medical_expiry: null,
+      has_insurance: false,
+      insurance_expiry: null,
+      photo_url: null,
+      workmen_compensation_document_url: null,
+      workmen_compensation_document_optional_url: null,
+      medical_insurance_card_url: null,
+      medical_insurance_card_optional_url: null,
+      noc_current_sponsor_document_url: null,
+      noc_client_document_url: null,
+      trade_license_document_url: null,
+    })!,
+  );
+
+  push("worker_clients", {
+    user_id: userId,
+    worker_id: workers[0].id,
+    project_client_id: projectClients[0].id,
+  });
+  push("worker_clients", {
+    user_id: userId,
+    worker_id: workers[1].id,
+    project_client_id: projectClients[0].id,
+  });
+  push("worker_clients", {
+    user_id: userId,
+    worker_id: workers[2].id,
+    project_client_id: projectClients[1].id,
+  });
+
   // ── Projects ───────────────────────────────────────────────────────────
   type ProjectSeed = {
     c: number;
