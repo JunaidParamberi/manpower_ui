@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   WORKER_DOCUMENT_SLOTS,
   columnForSlot,
+  isWorkerDocumentSlot,
   validateWorkerDocumentFile,
 } from "./worker-document-slots";
 
@@ -20,6 +21,19 @@ describe("columnForSlot", () => {
     for (const slot of WORKER_DOCUMENT_SLOTS) {
       expect(columnForSlot(slot).length).toBeGreaterThan(0);
     }
+  });
+});
+
+describe("isWorkerDocumentSlot", () => {
+  it("returns true for every declared slot", () => {
+    for (const slot of WORKER_DOCUMENT_SLOTS) {
+      expect(isWorkerDocumentSlot(slot)).toBe(true);
+    }
+  });
+
+  it("returns false for an arbitrary string", () => {
+    expect(isWorkerDocumentSlot("status")).toBe(false);
+    expect(isWorkerDocumentSlot("arbitrary_column")).toBe(false);
   });
 });
 

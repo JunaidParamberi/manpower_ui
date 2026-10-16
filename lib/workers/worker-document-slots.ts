@@ -17,6 +17,10 @@ export const WORKER_DOCUMENT_SLOTS = [
 
 export type WorkerDocumentSlot = (typeof WORKER_DOCUMENT_SLOTS)[number];
 
+export function isWorkerDocumentSlot(value: unknown): value is WorkerDocumentSlot {
+  return typeof value === "string" && (WORKER_DOCUMENT_SLOTS as readonly string[]).includes(value);
+}
+
 /** `photo` and the card slots don't follow the `<slot>_document_url`/`<slot>_url` split — this maps each slot to its actual column name. */
 const SLOT_COLUMN_OVERRIDES: Partial<Record<WorkerDocumentSlot, string>> = {
   photo: "photo_url",

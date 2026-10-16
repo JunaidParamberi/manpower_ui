@@ -6,6 +6,7 @@ import { getServerContext } from "@/lib/supabase/get-server-context";
 import {
   columnForSlot,
   extFromWorkerDocumentMime,
+  isWorkerDocumentSlot,
   validateWorkerDocumentFile,
   type WorkerDocumentSlot,
 } from "@/lib/workers/worker-document-slots";
@@ -29,6 +30,8 @@ export async function uploadWorkerDocument(
 ): Promise<DocMutationResult> {
   const parsedId = uuidSchema.safeParse(workerId);
   if (!parsedId.success) return { ok: false, error: "Invalid worker." };
+
+  if (!isWorkerDocumentSlot(slot)) return { ok: false, error: "Invalid document slot." };
 
   const file = formData.get("file");
   if (!(file instanceof File) || file.size === 0) {
@@ -80,6 +83,8 @@ export async function removeWorkerDocument(
   const parsedId = uuidSchema.safeParse(workerId);
   if (!parsedId.success) return { ok: false, error: "Invalid worker." };
 
+  if (!isWorkerDocumentSlot(slot)) return { ok: false, error: "Invalid document slot." };
+
   const { supabase, user } = await getServerContext();
   if (!user) return { ok: false, error: "Not authenticated." };
 
@@ -116,6 +121,10 @@ export async function addWorkerDocumentListItem(
   const parsedId = uuidSchema.safeParse(workerId);
   if (!parsedId.success) return { ok: false, error: "Invalid worker." };
 
+  if (category !== "cicpa" && category !== "additional") {
+    return { ok: false, error: "Invalid document category." };
+  }
+
   const file = formData.get("file");
   if (!(file instanceof File) || file.size === 0) {
     return { ok: false, error: "Choose a file to upload." };
@@ -127,6 +136,14 @@ export async function addWorkerDocumentListItem(
 
   const { supabase, user } = await getServerContext();
   if (!user) return { ok: false, error: "Not authenticated." };
+
+  const existing = await supabase
+    .from("workers")
+    .select("*")
+    .eq("id", parsedId.data)
+    .eq("user_id", user.id)
+    .maybeSingle();
+  if (existing.error || !existing.data) return { ok: false, error: "Worker not found." };
 
   const ext = extFromWorkerDocumentMime(file.type)!;
   const path = `${user.id}/${parsedId.data}/${category}-${crypto.randomUUID()}.${ext}`;
