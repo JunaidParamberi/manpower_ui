@@ -17,7 +17,11 @@ function chain(result: { data: unknown; error: unknown }) {
   q.delete = vi.fn(() => q);
   q.select = vi.fn(() => q);
   q.eq = vi.fn(() => q);
+  q.in = vi.fn(() => q);
   q.single = vi.fn(async () => result);
+  q.maybeSingle = vi.fn(async () => result);
+  q.then = (onFulfilled: (value: typeof result) => unknown, onRejected?: (reason: unknown) => unknown) =>
+    Promise.resolve(result).then(onFulfilled, onRejected);
   return q;
 }
 
@@ -58,6 +62,52 @@ describe("createWorker", () => {
     });
     const result = await createWorker({ employee_id: "EMP/2026/0099", name: "Test" });
     expect(result.ok).toBe(true);
+  });
+
+  it("rejects a supplier_id that does not belong to the authenticated user", async () => {
+    const supplierId = "11111111-1111-4111-a111-111111111111";
+    const supabase = {
+      from: vi.fn((table: string) => {
+        if (table === "suppliers") return chain({ data: null, error: null });
+        return chain({ data: { id: "w1", user_id: "u1" }, error: null });
+      }),
+    };
+    vi.mocked(getServerContext).mockResolvedValue({
+      supabase: supabase as never,
+      user: { id: "u1" } as never,
+    });
+    const result = await createWorker({
+      employee_id: "EMP/2026/0100",
+      name: "Test",
+      supplier_id: supplierId,
+    });
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error).toBe("Invalid supplier.");
+    }
+  });
+
+  it("rejects a client_ids entry that does not belong to the authenticated user", async () => {
+    const clientId = "22222222-2222-4222-a222-222222222222";
+    const supabase = {
+      from: vi.fn((table: string) => {
+        if (table === "project_clients") return chain({ data: [], error: null });
+        return chain({ data: { id: "w1", user_id: "u1" }, error: null });
+      }),
+    };
+    vi.mocked(getServerContext).mockResolvedValue({
+      supabase: supabase as never,
+      user: { id: "u1" } as never,
+    });
+    const result = await createWorker({
+      employee_id: "EMP/2026/0101",
+      name: "Test",
+      client_ids: [clientId],
+    });
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error).toBe("Invalid client.");
+    }
   });
 });
 
