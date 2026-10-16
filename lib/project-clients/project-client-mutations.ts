@@ -19,6 +19,13 @@ function revalidate() {
   revalidatePath("/project-clients");
 }
 
+function friendlyError(error: { code?: string; message: string }): string {
+  if (error.code === "23505" || error.message.includes("duplicate key")) {
+    return "A client with this ID already exists.";
+  }
+  return error.message;
+}
+
 export async function createProjectClient(raw: unknown): Promise<ProjectClientResult> {
   const { supabase, user } = await getServerContext();
   if (!user) return { ok: false, error: "Unauthenticated" };
@@ -43,7 +50,7 @@ export async function createProjectClient(raw: unknown): Promise<ProjectClientRe
     .select()
     .single();
 
-  if (error) return { ok: false, error: error.message };
+  if (error) return { ok: false, error: friendlyError(error) };
   revalidate();
   return { ok: true, projectClient: data as ProjectClientRow };
 }
@@ -74,7 +81,7 @@ export async function updateProjectClient(raw: unknown): Promise<ProjectClientRe
     .select()
     .single();
 
-  if (error) return { ok: false, error: error.message };
+  if (error) return { ok: false, error: friendlyError(error) };
   revalidate();
   return { ok: true, projectClient: data as ProjectClientRow };
 }

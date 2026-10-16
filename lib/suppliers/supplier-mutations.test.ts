@@ -55,6 +55,21 @@ describe("createSupplier", () => {
     expect(revalidateTag).toHaveBeenCalledWith("suppliers");
     expect(revalidatePath).toHaveBeenCalledWith("/suppliers");
   });
+
+  it("surfaces a duplicate supplier_code as a clean error, not a raw 23505", async () => {
+    const supabase = {
+      from: vi.fn(() => chain({ data: null, error: { code: "23505", message: "duplicate key value violates unique constraint" } })),
+    };
+    vi.mocked(getServerContext).mockResolvedValue({
+      supabase: supabase as never,
+      user: { id: "u1" } as never,
+    });
+    const result = await createSupplier({ name: "Acme", supplier_code: "SUP-1" });
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error).toBe("A supplier with this ID already exists.");
+    }
+  });
 });
 
 describe("deleteSupplier", () => {

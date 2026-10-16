@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { getServerContext } from "@/lib/supabase/get-server-context";
 import { createProjectClient, deleteProjectClient } from "./project-client-mutations";
 
@@ -45,6 +45,21 @@ describe("createProjectClient", () => {
     const result = await createProjectClient({ name: "GCS" });
     expect(result.ok).toBe(true);
     expect(revalidateTag).toHaveBeenCalledWith("project_clients");
+  });
+
+  it("surfaces a duplicate client_code as a clean error, not a raw 23505", async () => {
+    const supabase = {
+      from: vi.fn(() => chain({ data: null, error: { code: "23505", message: "duplicate key value violates unique constraint" } })),
+    };
+    vi.mocked(getServerContext).mockResolvedValue({
+      supabase: supabase as never,
+      user: { id: "u1" } as never,
+    });
+    const result = await createProjectClient({ name: "GCS", client_code: "CLI-1" });
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error).toBe("A client with this ID already exists.");
+    }
   });
 });
 

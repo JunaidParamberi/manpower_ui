@@ -19,6 +19,13 @@ function revalidate() {
   revalidatePath("/suppliers");
 }
 
+function friendlyError(error: { code?: string; message: string }): string {
+  if (error.code === "23505" || error.message.includes("duplicate key")) {
+    return "A supplier with this ID already exists.";
+  }
+  return error.message;
+}
+
 export async function createSupplier(raw: unknown): Promise<SupplierResult> {
   const { supabase, user } = await getServerContext();
   if (!user) return { ok: false, error: "Unauthenticated" };
@@ -43,7 +50,7 @@ export async function createSupplier(raw: unknown): Promise<SupplierResult> {
     .select()
     .single();
 
-  if (error) return { ok: false, error: error.message };
+  if (error) return { ok: false, error: friendlyError(error) };
   revalidate();
   return { ok: true, supplier: data as SupplierRow };
 }
@@ -74,7 +81,7 @@ export async function updateSupplier(raw: unknown): Promise<SupplierResult> {
     .select()
     .single();
 
-  if (error) return { ok: false, error: error.message };
+  if (error) return { ok: false, error: friendlyError(error) };
   revalidate();
   return { ok: true, supplier: data as SupplierRow };
 }
