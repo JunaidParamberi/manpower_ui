@@ -5,13 +5,18 @@
 - Node.js 20+ (Node 22 recommended)
 - npm (the repo uses npm lockfile)
 
-No database, no API keys, no `.env` file. There is no external service to
-configure — everything runs on your machine.
+Workspace data still runs on your machine (`mock-db.json`). Sign-in needs a
+local env file and the local Cloudflare D1 database. See
+[Authentication](./authentication.md) for the full setup.
 
 ## Install and run
 
 ```bash
 npm install
+cp .env.example .env.local
+cp .env.example .dev.vars
+# put the same BETTER_AUTH_SECRET (32+ characters) in both files
+npm run db:migrate:local
 npm run dev
 ```
 
@@ -38,50 +43,25 @@ the terminal.
 
 ## Signing in
 
-Go to `/auth/login`. **Any email address and any password work** — there is
-no credential checking. What you get depends on how you enter:
+Go to `/auth/sign-up` and create an account. The password must be at least 8
+characters. Sign-up opens a session immediately and starts the onboarding
+wizard. The demo workspace (clients, projects, tasks, documents) is seeded on
+that first signed-in request, keyed by the Better Auth user id.
 
 | Flow | What happens |
 |---|---|
-| **Log in** (any email) | You get a fully seeded demo workspace: ~9 clients, ~10 projects, ~40 tasks, time entries, ~30 documents (invoices, quotes, proposals, receipts, LPOs), expenses, recurring invoices, a marketing calendar with campaigns and posts, notifications and previous Kraft conversations |
-| **Sign up** (a fresh email) | You walk through the 3-step onboarding wizard (profile → brand kit → first client), watch the "setting up your workspace" ceremony, then land in the same seeded workspace |
-| **Continue with Google** | Simulated — signs you in immediately as a demo Google account, no consent screen |
-| **Magic link** | Shows the real "check your email" screen; no email is sent (see below) |
-| **Forgot password** | Same — shows the "check your email" screen; no email is sent |
+| **Sign up** | Account is written to local D1. You walk through onboarding (profile → brand kit → first client), then land in the seeded workspace |
+| **Log in** | Email and password are checked against D1. If onboarding is unfinished you return to the wizard; otherwise you land on the dashboard |
+| **Continue with Google** | Not available. The button explains that |
+| **Magic link** | Not available. The button explains that |
+| **Forgot password** | In development the reset link is printed in the server log (`[auth] password reset …`). Open that URL to set a new password |
 
-### Simulating the email links
+### Each account is its own workspace
 
-Since no email provider is wired, the magic-link / password-reset screens are
-dead ends by design. If you want to walk the full flow anyway, the email
-links are just URLs:
+The Better Auth user id is the owner key for mock rows. Signing up with a new
+email creates a new workspace. Signing in again with the same email reuses it.
 
-1. On the login page, switch to the **magic link** tab, enter your email and
-   click **Send magic link**. The app shows "Check your email".
-2. The link a real email would contain is:
-
-   ```
-   http://localhost:3000/auth/confirm?code=anything&next=/dashboard
-   ```
-
-   Opening it completes the sign-in for the email you requested the link for.
-
-For a password reset, the equivalent is:
-
-```
-http://localhost:3000/auth/confirm?token_hash=anything&type=recovery&next=/auth/update-password
-```
-
-…which lands you on the update-password screen.
-
-### Each email is its own workspace
-
-Accounts are keyed by email address (case-insensitive). Every new email you
-sign in with gets its own full copy of the demo data. Your user id is derived
-deterministically from the email, so the same email always maps to the same
-account and data.
-
-Sessions live in a `mock_session` cookie and last **7 days**. Sign out from
-the account menu (avatar, top right).
+Sign out from the account menu (avatar, top right).
 
 ## Resetting the demo
 
@@ -100,7 +80,9 @@ rm -rf mock-db.json mock-storage
 npm run dev
 ```
 
-The workspace re-seeds itself the next time you sign in.
+The workspace re-seeds itself the next time you sign in. That does not delete
+the D1 user. To wipe local accounts and sessions as well, see
+[Authentication → Resetting auth data](./authentication.md#resetting-auth-data).
 
 To reset **one account**, sign in with a different email — or delete just
 that account's data by editing `mock-db.json` (see
@@ -108,12 +90,12 @@ that account's data by editing `mock-db.json` (see
 
 ## Optional environment variables
 
-None are required. Two are honoured if present:
+Auth requires `BETTER_AUTH_SECRET` and `BETTER_AUTH_URL` in `.env.local` and
+`.dev.vars`. See [Authentication](./authentication.md#environment).
+
+Two more are honoured if present:
 
 | Variable | Effect when set |
 |---|---|
 | `NEXT_PUBLIC_APP_URL` | Base URL used when building shareable links (invoice pay links, quote approval links). Defaults to a relative URL |
-| `NEXT_PUBLIC_GOOGLE_CLIENT_ID` | Enables the real Google One Tap widget on the login page. Without it the widget simply doesn't render; the simulated "Continue with Google" button still works |
-
-Everything else (billing variants, Supabase keys, Anthropic keys, Resend
-keys) was removed with the backends.
+| `NEXT_PUBLIC_GOOGLE_CLIENT_ID` | Enables the Google One Tap widget on the login page. Without it the widget does not render. "Continue with Google" is not a working sign-in method |

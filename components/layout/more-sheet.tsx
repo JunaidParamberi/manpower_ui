@@ -10,7 +10,7 @@ import { AiIcon } from "@/components/shared/ai-icon";
 import { MORE_ROUTES } from "@/config/mobile-nav";
 import { PLAN_ORDER } from "@/config/plans";
 import { useAiPanel } from "@/lib/ai-panel/context";
-import { createClient } from "@/lib/supabase/client";
+import { authClient } from "@/lib/auth-client";
 import type { PlanUsage } from "@/lib/plan-usage/helpers";
 import type { PinnedItem } from "@/lib/pinned/queries";
 import { cn } from "@/lib/utils";
@@ -98,9 +98,9 @@ export function MoreSheet({
 
   const signOut = async () => {
     onOpenChange(false);
-    const supabase = createClient();
-    await supabase.auth.signOut();
+    await authClient.signOut();
     router.push("/auth/login");
+    router.refresh();
   };
 
   const close = () => onOpenChange(false);

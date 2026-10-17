@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AccountSection } from "@/components/features/settings/account/account-section";
-import { createClient } from "@/lib/supabase/client";
+import { authClient } from "@/lib/auth-client";
 import { changeEmailSchema } from "@/lib/validations/account";
 
 type Props = {
@@ -38,11 +38,11 @@ export function ChangeEmailForm({ currentEmail }: Props) {
 
     setPending(true);
     try {
-      const supabase = createClient();
-      const { error: updateError } = await supabase.auth.updateUser({
-        email: parsed.data.newEmail,
+      const { error: updateError } = await authClient.changeEmail({
+        newEmail: parsed.data.newEmail,
+        callbackURL: "/settings/account",
       });
-      if (updateError) throw updateError;
+      if (updateError) throw new Error(updateError.message);
       setSuccess(`Check ${parsed.data.newEmail} to confirm the change.`);
       setNewEmail("");
     } catch (err) {

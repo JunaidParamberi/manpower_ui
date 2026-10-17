@@ -20,7 +20,7 @@ app code (unchanged)
 mock implementations (lib/mock/**)
    │
    ▼
-mock-db.json · mock-storage/ · mock_session cookie · scripted AI stream
+mock-db.json · mock-storage/ · Better Auth session (D1) · scripted AI stream
 ```
 
 ~107 `queries.ts` modules and 60+ server actions were **not touched** — they
@@ -70,23 +70,18 @@ runtime: a local shim at `lib/vendor/supabase-js.ts` is mapped over it via
 
 ## Auth
 
-`lib/mock/auth.ts` exposes the same `supabase-js` auth API
-(`signInWithPassword`, `signUp`, `signInWithOtp`, `signInWithOAuth`,
-`exchangeCodeForSession`, `verifyOtp`, `updateUser`, `signOut`, `getUser`,
-`getClaims`…), backed by cookies instead of a provider:
+Identity is Better Auth on Cloudflare D1 (Drizzle, SQLite dialect). The full
+setup, env vars, and migration commands are in
+[Authentication](./authentication.md).
 
-- **`mock_session`** — the session: `encodeURIComponent(JSON { e: email,
-  w: needsOnboarding, x: expiresAt })`, 7-day TTL. Readable from both client
-  (`document.cookie`) and server (`cookies()` from `next/headers`).
-- **`mock_pending_email`** — set by magic-link / OTP / OAuth requests, used
-  by `/auth/confirm` to complete the flow.
-- **User id** — derived deterministically from the email (FNV-1a → UUID
-  shape), so the same email always maps to the same account.
-- **Provisioning** — `ensureUser()` in `lib/mock/store.ts` lazily creates
-  the account **and seeds its full demo workspace** on first sight.
+Server code still calls the mock Supabase client. `lib/supabase/server.ts`
+resolves the Better Auth session first and passes that user into the mock
+client, so `getUser()` / `getClaims()` return the D1 user. `ensureUser()`
+then seeds the demo workspace under that user id.
 
-There is no middleware: route protection happens in the app layout and in
-`getServerContext()`, which read the cookie server-side.
+`middleware.ts` only checks that the session cookie exists, and it sets
+`x-pathname` so the onboarding layout knows which step you are on. Pages and
+server actions still validate the session through `getRequestAuthUser()`.
 
 ## Storage
 
@@ -143,9 +138,9 @@ tool chips, draft cards and confirm cards are all exercised for real.
   views) were part of the removed public portal and were never extracted.
   Demonstrating the payment flow end-to-end is done via the **mock payment
   modal** on the invoice instead.
-- **Emails never arrive.** Magic-link, password-reset and transactional email
-  screens render, but nothing is delivered — see
-  [Getting started → Simulating the email links](./getting-started.md#simulating-the-email-links).
+- **Emails never arrive.** Password-reset and email-change links are printed
+  in the dev server log. Transactional mail still logs `[mock-email] …`.
+  See [Authentication](./authentication.md#sign-in-flows).
 - **Support is a placeholder** screen.
 - **The whole app is single-process.** The DB lives in memory and is flushed
   to disk on every write — two dev servers on one checkout would clobber each

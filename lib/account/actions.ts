@@ -1,7 +1,11 @@
 "use server";
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { headers } from "next/headers";
+
+import { getAuthDb } from "@/db";
 import { deleteUserStorageObjects } from "@/lib/account/delete-storage";
+import { createAuth } from "@/lib/auth";
+import { adminAuthHooks } from "@/lib/mock/server-client";
 import { getServerContext } from "@/lib/supabase/get-server-context";
 import {
   DELETE_ACCOUNT_CONFIRMATION,
@@ -13,11 +17,16 @@ export type AccountActionResult =
   | { ok: false; message: string };
 
 export async function signOutOtherSessions(): Promise<AccountActionResult> {
-  const { supabase } = await getServerContext();
-  const { error } = await supabase.auth.signOut({ scope: "others" });
-
-  if (error) {
-    return { ok: false, message: error.message };
+  try {
+    const auth = createAuth(await getAuthDb());
+    await auth.api.revokeOtherSessions({
+      headers: await headers(),
+    });
+  } catch (error) {
+    return {
+      ok: false,
+      message: error instanceof Error ? error.message : "Could not sign out other sessions.",
+    };
   }
 
   return { ok: true };
@@ -40,18 +49,9 @@ export async function deleteAccount(input: {
     };
   }
 
-  const { supabase, user } = await getServerContext();
+  const { user } = await getServerContext();
   if (!user?.email) {
     return { ok: false, message: "Not authenticated." };
-  }
-
-  const { error: verifyError } = await supabase.auth.signInWithPassword({
-    email: user.email,
-    password: parsed.data.password,
-  });
-
-  if (verifyError) {
-    return { ok: false, message: "Incorrect password." };
   }
 
   if (parsed.data.confirmation !== DELETE_ACCOUNT_CONFIRMATION) {
@@ -73,14 +73,20 @@ export async function deleteAccount(input: {
     };
   }
 
-  const admin = createAdminClient();
-  const { error: deleteError } = await admin.auth.admin.deleteUser(user.id);
-
-  if (deleteError) {
-    return { ok: false, message: deleteError.message };
+  try {
+    const auth = createAuth(await getAuthDb());
+    await auth.api.deleteUser({
+      body: { password: parsed.data.password },
+      headers: await headers(),
+    });
+  } catch {
+    return { ok: false, message: "Incorrect password." };
   }
 
-  await supabase.auth.signOut({ scope: "local" });
+  const { error: deleteError } = await adminAuthHooks.deleteUser(user.id);
+  if (deleteError) {
+    return { ok: false, message: deleteError.message ?? "Failed to delete workspace data." };
+  }
 
   return { ok: true };
 }

@@ -11,7 +11,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LegalPolicyLink } from "@/components/legal/legal-policy-link";
-import { createClient } from "@/lib/supabase/client";
+import { authClient } from "@/lib/auth-client";
 import { PENDING_LEGAL_ACCEPTANCE_KEY } from "@/config/legal";
 import { cn } from "@/lib/utils";
 import { AUTH_TITLE_CLASS } from "@/components/shared/title-classes";
@@ -24,7 +24,6 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [acceptedPolicies, setAcceptedPolicies] = useState(false);
   const router = useRouter();
 
@@ -42,20 +41,20 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
       return;
     }
 
-    const supabase = createClient();
     setIsLoading(true);
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const name = email.split("@")[0]?.replace(/[._+-]+/g, " ").trim() || "User";
+      const { error } = await authClient.signUp.email({
         email,
         password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/confirm?next=/onboarding`,
-        },
+        name,
+        callbackURL: "/onboarding",
       });
-      if (error) throw error;
+      if (error) throw new Error(error.message);
       sessionStorage.setItem(PENDING_LEGAL_ACCEPTANCE_KEY, "1");
-      router.push("/auth/sign-up-success");
+      router.push("/onboarding");
+      router.refresh();
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
@@ -64,22 +63,7 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
   };
 
   const handleGoogleSignUp = async () => {
-    const supabase = createClient();
-    setIsGoogleLoading(true);
-    setError(null);
-
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/auth/confirm?next=/dashboard`,
-        },
-      });
-      if (error) throw error;
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-      setIsGoogleLoading(false);
-    }
+    setError("Google sign-in isn't available yet. Create an account with email.");
   };
 
   return (
@@ -95,11 +79,10 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
         type="button"
         variant="outline"
         className="h-11 w-full justify-center gap-2 rounded-xl border-[var(--border-strong)] bg-[var(--bg-surface)] text-sm font-medium shadow-[var(--shadow-xs)] hover:bg-[var(--bg-subtle)]"
-        disabled={isGoogleLoading}
         onClick={handleGoogleSignUp}
       >
         <FcGoogle className="size-[18px]" />
-        {isGoogleLoading ? "Redirecting…" : "Continue with Google"}
+        Continue with Google
       </Button>
 
       <div className="relative flex items-center">

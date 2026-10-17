@@ -9,7 +9,7 @@ import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createClient } from "@/lib/supabase/client";
+import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { AUTH_TITLE_CLASS } from "@/components/shared/title-classes";
 
@@ -23,22 +23,24 @@ export function LoginForm({
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const [isMagicLoading, setIsMagicLoading] = useState(false);
   const [magicLinkSent, setMagicLinkSent] = useState(false);
   const [mode, setMode] = useState<"password" | "magic">("password");
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const supabase = createClient();
     setIsLoading(true);
     setError(null);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) throw error;
+      const { error } = await authClient.signIn.email({
+        email,
+        password,
+        callbackURL: next,
+      });
+      if (error) throw new Error(error.message);
       router.push(next);
+      router.refresh();
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
@@ -47,51 +49,11 @@ export function LoginForm({
   };
 
   const handleMagicLink = async () => {
-    if (!email) {
-      setError("Enter your email above, then request a magic link.");
-      return;
-    }
-
-    const supabase = createClient();
-    setIsMagicLoading(true);
-    setError(null);
-
-    try {
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: {
-          // Existing-user sign-in only; reuse the standard destination path so
-          // the send-auth-email edge function builds the confirm link itself.
-          shouldCreateUser: false,
-          emailRedirectTo: `${window.location.origin}${next}`,
-        },
-      });
-      if (error) throw error;
-      setMagicLinkSent(true);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-    } finally {
-      setIsMagicLoading(false);
-    }
+    setError("Magic links aren't available yet. Sign in with your password.");
   };
 
   const handleGoogleLogin = async () => {
-    const supabase = createClient();
-    setIsGoogleLoading(true);
-    setError(null);
-
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/auth/confirm?next=${encodeURIComponent(next)}`,
-        },
-      });
-      if (error) throw error;
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-      setIsGoogleLoading(false);
-    }
+    setError("Google sign-in isn't available yet. Sign in with your password.");
   };
 
   if (magicLinkSent) {
@@ -138,11 +100,10 @@ export function LoginForm({
         type="button"
         variant="outline"
         className="h-11 w-full justify-center gap-2 rounded-xl border-[var(--border-strong)] bg-[var(--bg-surface)] text-sm font-medium shadow-[var(--shadow-xs)] hover:bg-[var(--bg-subtle)]"
-        disabled={isGoogleLoading}
         onClick={handleGoogleLogin}
       >
         <FcGoogle className="size-[18px]" />
-        {isGoogleLoading ? "Redirecting…" : "Continue with Google"}
+        Continue with Google
       </Button>
 
       <div className="relative flex items-center">
@@ -265,16 +226,14 @@ export function LoginForm({
         <Button
           type="submit"
           className="group h-11 w-full justify-center gap-1.5 rounded-xl text-sm font-medium"
-          disabled={mode === "password" ? isLoading : isMagicLoading}
+          disabled={isLoading}
         >
           {mode === "password"
             ? isLoading
               ? "Signing in…"
               : "Sign in"
-            : isMagicLoading
-              ? "Sending magic link…"
-              : "Send magic link"}
-          {!(mode === "password" ? isLoading : isMagicLoading) && (
+            : "Send magic link"}
+          {!isLoading && (
             <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
           )}
         </Button>

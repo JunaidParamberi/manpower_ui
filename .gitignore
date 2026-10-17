@@ -55,6 +55,11 @@ deno.lock
 /mock-db.json
 /mock-storage/
 
+# local Cloudflare state and secrets
+.wrangler/
+.dev.vars
+.open-next/
+
 # local tooling artifacts
 .playwright-mcp/
 kraft-turn.yml

@@ -14,6 +14,12 @@
 | `npm run clean` | Remove `.next` and `node_modules/.cache` |
 | `npm run storybook` | Storybook dev server on :6006 |
 | `npm run storybook:build` | Static Storybook build |
+| `npm run auth:schema` | Regenerate `db/schema.ts` from Better Auth |
+| `npm run db:generate` | Write a Drizzle SQL migration under `drizzle/` |
+| `npm run db:migrate:local` | Apply D1 migrations to the local database |
+| `npm run db:migrate:remote` | Apply D1 migrations to remote `manpower-auth` |
+| `npm run preview` | OpenNext build, then `wrangler dev` |
+| `npm run deploy` | OpenNext build, then `wrangler deploy` |
 
 ## Tests
 
@@ -62,8 +68,8 @@ app/
   (marketing)/    # /privacy, /terms
   auth/           # login, sign-up, forgot/update password, confirm, error
   onboarding/     # profile → brand → client wizard
-  api/            # ai/stream, ai/invalidate, documents/[id]/pdf,
-                  #   account/export, invoices/pay
+  api/            # auth/[...all], ai/stream, ai/invalidate,
+                  #   documents/[id]/pdf, account/export, invoices/pay
   storage/        # public-bucket file route for mock-storage/
 components/
   ui/             # shadcn primitives
@@ -73,9 +79,11 @@ components/
   auth/           # auth form pieces
 config/           # plans, nav, command palette, mobile nav, branding
 lib/
-  mock/           # ← the mock layer: schema, db, query builder, auth,
-                  #   storage, session, seed, user-id
-  supabase/       # the seams: server / client / admin / get-server-context
+  auth.ts         # Better Auth factory (D1 + Drizzle)
+  auth-client.ts  # browser auth client
+  auth/           # request session helper
+  mock/           # workspace store: schema, db, query builder, seed
+  supabase/       # seams: server / client / admin / get-server-context
   vendor/         # supabase-js shim (mapped via tsconfig paths)
   ai/             # mock turn scripter + agents
   <domain>/       # queries.ts + actions.ts per feature (unchanged app code)
