@@ -19,6 +19,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import {
+  Building2,
   CalendarRange,
   Check,
   ChevronRight,
@@ -27,6 +28,7 @@ import {
   FileText,
   FolderKanban,
   GripVertical,
+  HardHat,
   LayoutDashboard,
   ListChecks,
   Package,
@@ -35,6 +37,7 @@ import {
   Settings,
   Settings2,
   Timer,
+  Truck,
   TrendingUp,
   Users,
 } from "lucide-react";
@@ -104,6 +107,14 @@ const NAV_SECTIONS: NavSectionDef[] = [
       },
       { id: "services",  label: "Services",  href: "/services",  Icon: Package },
       { id: "marketing", label: "Marketing", href: "/marketing", Icon: CalendarRange },
+    ],
+  },
+  {
+    label: "Manpower",
+    items: [
+      { id: "workers",         label: "Workers",         href: "/workers",         Icon: HardHat },
+      { id: "suppliers",       label: "Suppliers",       href: "/suppliers",       Icon: Truck },
+      { id: "project-clients", label: "Project clients", href: "/project-clients", Icon: Building2 },
     ],
   },
   {
