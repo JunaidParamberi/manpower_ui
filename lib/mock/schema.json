@@ -3233,6 +3233,129 @@
     ],
     "uniqueConstraints": []
   },
+"suppliers": {
+  "columns": [
+    { "name": "id", "type": "uuid", "kind": "uuid", "notNull": false, "pk": true, "identity": false, "default": "gen_random_uuid()" },
+    { "name": "user_id", "type": "uuid", "kind": "uuid", "notNull": true, "pk": false, "identity": false },
+    { "name": "name", "type": "text", "kind": "text", "notNull": true, "pk": false, "identity": false },
+    { "name": "supplier_code", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "license_number", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "vat_number", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "contact_name", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "email", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "phone", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "website", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "notes", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "trade_license_document_url", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "vat_registration_document_url", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "created_at", "type": "timestamptz", "kind": "timestamp", "notNull": true, "pk": false, "identity": false, "default": "now()" },
+    { "name": "updated_at", "type": "timestamptz", "kind": "timestamp", "notNull": true, "pk": false, "identity": false, "default": "now()" }
+  ],
+  "foreignKeys": [
+    { "name": "auth.users_user_id_fkey", "columns": ["user_id"], "refTable": "auth.users", "refColumns": ["id"] }
+  ],
+  "uniqueConstraints": [["user_id", "supplier_code"]]
+},
+"project_clients": {
+  "columns": [
+    { "name": "id", "type": "uuid", "kind": "uuid", "notNull": false, "pk": true, "identity": false, "default": "gen_random_uuid()" },
+    { "name": "user_id", "type": "uuid", "kind": "uuid", "notNull": true, "pk": false, "identity": false },
+    { "name": "name", "type": "text", "kind": "text", "notNull": true, "pk": false, "identity": false },
+    { "name": "client_code", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "license_number", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "vat_number", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "contact_name", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "email", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "phone", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "website", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "notes", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "trade_license_document_url", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "vat_registration_document_url", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "created_at", "type": "timestamptz", "kind": "timestamp", "notNull": true, "pk": false, "identity": false, "default": "now()" },
+    { "name": "updated_at", "type": "timestamptz", "kind": "timestamp", "notNull": true, "pk": false, "identity": false, "default": "now()" }
+  ],
+  "foreignKeys": [
+    { "name": "auth.users_user_id_fkey", "columns": ["user_id"], "refTable": "auth.users", "refColumns": ["id"] }
+  ],
+  "uniqueConstraints": [["user_id", "client_code"]]
+},
+"workers": {
+  "columns": [
+    { "name": "id", "type": "uuid", "kind": "uuid", "notNull": false, "pk": true, "identity": false, "default": "gen_random_uuid()" },
+    { "name": "user_id", "type": "uuid", "kind": "uuid", "notNull": true, "pk": false, "identity": false },
+    { "name": "employee_id", "type": "text", "kind": "text", "notNull": true, "pk": false, "identity": false },
+    { "name": "name", "type": "text", "kind": "text", "notNull": true, "pk": false, "identity": false },
+    { "name": "nationality", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "trade_category", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "status", "type": "text", "kind": "text", "notNull": true, "pk": false, "identity": false, "default": "'available'" },
+    { "name": "supplier_id", "type": "uuid", "kind": "uuid", "notNull": false, "pk": false, "identity": false },
+    { "name": "notes", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "passport_number", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "passport_expiry", "type": "date", "kind": "date", "notNull": false, "pk": false, "identity": false },
+    { "name": "passport_document_url", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "passport_document_optional_url", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "emirates_id", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "emirates_id_expiry", "type": "date", "kind": "date", "notNull": false, "pk": false, "identity": false },
+    { "name": "emirates_id_document_url", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "emirates_id_document_optional_url", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "visa_number", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "visa_expiry", "type": "date", "kind": "date", "notNull": false, "pk": false, "identity": false },
+    { "name": "visa_document_url", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "visa_document_optional_url", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "medical_fit", "type": "boolean", "kind": "bool", "notNull": true, "pk": false, "identity": false, "default": "false" },
+    { "name": "medical_expiry", "type": "date", "kind": "date", "notNull": false, "pk": false, "identity": false },
+    { "name": "has_insurance", "type": "boolean", "kind": "bool", "notNull": true, "pk": false, "identity": false, "default": "false" },
+    { "name": "insurance_expiry", "type": "date", "kind": "date", "notNull": false, "pk": false, "identity": false },
+    { "name": "photo_url", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "workmen_compensation_document_url", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "workmen_compensation_document_optional_url", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "medical_insurance_card_url", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "medical_insurance_card_optional_url", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "noc_current_sponsor_document_url", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "noc_client_document_url", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "trade_license_document_url", "type": "text", "kind": "text", "notNull": false, "pk": false, "identity": false },
+    { "name": "created_at", "type": "timestamptz", "kind": "timestamp", "notNull": true, "pk": false, "identity": false, "default": "now()" },
+    { "name": "updated_at", "type": "timestamptz", "kind": "timestamp", "notNull": true, "pk": false, "identity": false, "default": "now()" }
+  ],
+  "foreignKeys": [
+    { "name": "auth.users_user_id_fkey", "columns": ["user_id"], "refTable": "auth.users", "refColumns": ["id"] },
+    { "name": "workers_supplier_id_fkey", "columns": ["supplier_id"], "refTable": "suppliers", "refColumns": ["id"] }
+  ],
+  "uniqueConstraints": [["user_id", "employee_id"]]
+},
+"worker_clients": {
+  "columns": [
+    { "name": "id", "type": "uuid", "kind": "uuid", "notNull": false, "pk": true, "identity": false, "default": "gen_random_uuid()" },
+    { "name": "user_id", "type": "uuid", "kind": "uuid", "notNull": true, "pk": false, "identity": false },
+    { "name": "worker_id", "type": "uuid", "kind": "uuid", "notNull": true, "pk": false, "identity": false },
+    { "name": "project_client_id", "type": "uuid", "kind": "uuid", "notNull": true, "pk": false, "identity": false },
+    { "name": "created_at", "type": "timestamptz", "kind": "timestamp", "notNull": true, "pk": false, "identity": false, "default": "now()" },
+    { "name": "updated_at", "type": "timestamptz", "kind": "timestamp", "notNull": true, "pk": false, "identity": false, "default": "now()" }
+  ],
+  "foreignKeys": [
+    { "name": "auth.users_user_id_fkey", "columns": ["user_id"], "refTable": "auth.users", "refColumns": ["id"] },
+    { "name": "worker_clients_worker_id_fkey", "columns": ["worker_id"], "refTable": "workers", "refColumns": ["id"] },
+    { "name": "worker_clients_project_client_id_fkey", "columns": ["project_client_id"], "refTable": "project_clients", "refColumns": ["id"] }
+  ],
+  "uniqueConstraints": [["worker_id", "project_client_id"]]
+},
+"worker_documents": {
+  "columns": [
+    { "name": "id", "type": "uuid", "kind": "uuid", "notNull": false, "pk": true, "identity": false, "default": "gen_random_uuid()" },
+    { "name": "user_id", "type": "uuid", "kind": "uuid", "notNull": true, "pk": false, "identity": false },
+    { "name": "worker_id", "type": "uuid", "kind": "uuid", "notNull": true, "pk": false, "identity": false },
+    { "name": "category", "type": "text", "kind": "text", "notNull": true, "pk": false, "identity": false, "default": "'additional'" },
+    { "name": "label", "type": "text", "kind": "text", "notNull": true, "pk": false, "identity": false },
+    { "name": "file_url", "type": "text", "kind": "text", "notNull": true, "pk": false, "identity": false },
+    { "name": "created_at", "type": "timestamptz", "kind": "timestamp", "notNull": true, "pk": false, "identity": false, "default": "now()" },
+    { "name": "updated_at", "type": "timestamptz", "kind": "timestamp", "notNull": true, "pk": false, "identity": false, "default": "now()" }
+  ],
+  "foreignKeys": [
+    { "name": "auth.users_user_id_fkey", "columns": ["user_id"], "refTable": "auth.users", "refColumns": ["id"] },
+    { "name": "worker_documents_worker_id_fkey", "columns": ["worker_id"], "refTable": "workers", "refColumns": ["id"] }
+  ],
+  "uniqueConstraints": []
+},
   "recurring_invoices": {
     "columns": [
       {
