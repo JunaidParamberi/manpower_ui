@@ -35,11 +35,25 @@ export function persist(): void {
 }
 
 export type EnsureUserOptions = {
+  /** Better Auth user id. New workspaces are keyed by this id. */
+  id?: string;
   /** Pass `null` explicitly to leave the display name empty (sign-up flow). */
   fullName?: string | null;
   /** true when the account still has to walk through /onboarding. */
   onboardingComplete?: boolean;
 };
+
+function rekeyMockUser(db: MockDatabase, fromId: string, toId: string): void {
+  const user = db.users.find((row) => row.id === fromId);
+  if (!user || fromId === toId) return;
+  user.id = toId;
+  for (const [table, rows] of Object.entries(db.tables)) {
+    for (const row of rows) {
+      if (row.user_id === fromId) row.user_id = toId;
+      if (table === "profiles" && row.id === fromId) row.id = toId;
+    }
+  }
+}
 
 /**
  * Find (or lazily create) the account + demo workspace for an email. Called
@@ -50,11 +64,22 @@ export function ensureUser(email: string, options: EnsureUserOptions = {}): Mock
   const normalized = email.trim().toLowerCase();
   const db = getDb();
 
+  if (options.id) {
+    const byId = db.users.find((user) => user.id === options.id);
+    if (byId) return byId;
+  }
+
   const existing = db.users.find((user) => user.email === normalized);
-  if (existing) return existing;
+  if (existing) {
+    if (options.id && existing.id !== options.id) {
+      rekeyMockUser(db, existing.id, options.id);
+      persist();
+    }
+    return existing;
+  }
 
   const record: MockAuthUserRecord = {
-    id: userIdForEmail(normalized),
+    id: options.id ?? userIdForEmail(normalized),
     email: normalized,
     created_at: new Date().toISOString(),
   };
@@ -94,6 +119,26 @@ export type ServerSession = {
  * "anonymous" — those workers are always handed a `userId` explicitly anyway.
  */
 export async function currentServerSession(): Promise<ServerSession | null> {
+  try {
+    const { getRequestAuthUser } = await import("@/lib/auth/request-user");
+    const authUser = await getRequestAuthUser();
+    if (authUser?.email) {
+      const user = ensureUser(authUser.email, {
+        id: authUser.id,
+        fullName: null,
+        onboardingComplete: false,
+      });
+      return {
+        email: user.email,
+        userId: user.id,
+        needsOnboarding: false,
+        user,
+      };
+    }
+  } catch {
+    // No request scope, or D1 is unavailable. Fall through to the mock cookie.
+  }
+
   try {
     const { cookies } = await import("next/headers");
     const jar = await cookies();

@@ -8,14 +8,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AccountSection } from "@/components/features/settings/account/account-section";
-import { createClient } from "@/lib/supabase/client";
+import { authClient } from "@/lib/auth-client";
 import { changePasswordSchema } from "@/lib/validations/account";
 
 type Props = {
   email: string;
 };
 
-export function ChangePasswordForm({ email }: Props) {
+export function ChangePasswordForm({ email: _email }: Props) {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -49,19 +49,14 @@ export function ChangePasswordForm({ email }: Props) {
 
     setPending(true);
     try {
-      const supabase = createClient();
-      const { error: verifyError } = await supabase.auth.signInWithPassword({
-        email,
-        password: parsed.data.currentPassword,
+      const { error: updateError } = await authClient.changePassword({
+        currentPassword: parsed.data.currentPassword,
+        newPassword: parsed.data.newPassword,
+        revokeOtherSessions: false,
       });
-      if (verifyError) {
-        throw new Error("Current password is incorrect.");
+      if (updateError) {
+        throw new Error(updateError.message || "Current password is incorrect.");
       }
-
-      const { error: updateError } = await supabase.auth.updateUser({
-        password: parsed.data.newPassword,
-      });
-      if (updateError) throw updateError;
 
       setSuccess(true);
       setCurrentPassword("");

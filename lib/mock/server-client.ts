@@ -5,7 +5,7 @@
  *
  * Server-only — pulls in the JSON store through the query builder.
  */
-import { createMockAuth, type AuthCookieAdapter } from "@/lib/mock/auth";
+import { createMockAuth, type AuthCookieAdapter, type AuthSessionUser } from "@/lib/mock/auth";
 import type { MockSupabaseClient } from "@/lib/mock/client-types";
 import { createQueryBuilder, type MockQuery } from "@/lib/mock/query";
 import { MockRpc } from "@/lib/mock/rpc";
@@ -82,12 +82,16 @@ export const adminAuthHooks = {
   },
 };
 
-export function createMockServerClient(jar: CookieJar): MockSupabaseClient {
+export function createMockServerClient(
+  jar: CookieJar,
+  sessionUser?: AuthSessionUser | null,
+): MockSupabaseClient {
   const provision: ProvisionHook = (email, options) => ensureUser(email, options);
 
   const auth = createMockAuth({
     cookies: adapterFor(jar),
     provision,
+    sessionUser,
     admin: adminAuthHooks,
   });
 

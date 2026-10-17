@@ -8,7 +8,7 @@ import { ArrowRight, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createClient } from "@/lib/supabase/client";
+import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { AUTH_TITLE_CLASS } from "@/components/shared/title-classes";
 
@@ -24,15 +24,21 @@ export function UpdatePasswordForm({
 
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    const supabase = createClient();
     setIsLoading(true);
     setError(null);
 
     try {
-      const { error } = await supabase.auth.updateUser({ password });
-      if (error) throw error;
-      // Update this route to redirect to an authenticated route. The user already has an active session.
+      const token = new URLSearchParams(window.location.search).get("token");
+      if (!token) {
+        throw new Error("This reset link is missing a token. Request a new one.");
+      }
+      const { error } = await authClient.resetPassword({
+        newPassword: password,
+        token,
+      });
+      if (error) throw new Error(error.message);
       router.push("/dashboard");
+      router.refresh();
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {

@@ -36,9 +36,20 @@ export type ProvisionHook = (
   options: { onboardingComplete: boolean; fullName?: string | null },
 ) => { id: string; email: string; created_at: string };
 
+export type AuthSessionUser = {
+  id: string;
+  email: string;
+  created_at: string;
+};
+
 export type MockAuthOptions = {
   cookies: AuthCookieAdapter;
   provision?: ProvisionHook;
+  /**
+   * Server-side Better Auth session. When set, `getUser` / `getClaims` use
+   * this identity instead of the legacy mock cookie.
+   */
+  sessionUser?: AuthSessionUser | null;
   /** Service-role operations; the browser build stubs these out. */
   admin?: {
     deleteUser: (id: string) => Promise<MockResult>;
@@ -122,6 +133,7 @@ export function createMockAuth(options: MockAuthOptions) {
   const { cookies: adapter, provision } = options;
 
   const currentUserRecord = (onboardingComplete: boolean) => {
+    if (options.sessionUser) return options.sessionUser;
     const payload = readSession(adapter);
     if (!payload) return null;
     return recordFor(payload.e, provision, onboardingComplete);
@@ -144,6 +156,16 @@ export function createMockAuth(options: MockAuthOptions) {
     },
 
     async getClaims(): Promise<any> {
+      if (options.sessionUser) {
+        return ok({
+          claims: {
+            sub: options.sessionUser.id,
+            email: options.sessionUser.email,
+            role: "authenticated",
+            aud: "authenticated",
+          },
+        });
+      }
       const payload = readSession(adapter);
       if (!payload) return ok({ claims: null });
       const record = recordFor(payload.e, provision, payload.w === 0);
@@ -159,6 +181,10 @@ export function createMockAuth(options: MockAuthOptions) {
     },
 
     async getSession(): Promise<any> {
+      if (options.sessionUser) {
+        const user = toUser(options.sessionUser);
+        return ok({ session: sessionFor(user) });
+      }
       const payload = readSession(adapter);
       if (!payload) return ok({ session: null });
       const record = recordFor(payload.e, provision, payload.w === 0);

@@ -1,6 +1,14 @@
 import path from "path";
 import { fileURLToPath } from "url";
 import type { NextConfig } from "next";
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+
+// Initialize OpenNext for local Cloudflare bindings emulation during `next dev`
+if (process.env.NODE_ENV !== "production") {
+  initOpenNextCloudflareForDev({
+    persist: { path: ".wrangler/state/v3" },
+  });
+}
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 

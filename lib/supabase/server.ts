@@ -14,8 +14,8 @@ export async function createClient() {
   const cookieStore = await cookies();
 
   // Make sure the signed-in account (and its seeded workspace) exists before
-  // any query in this request runs.
-  await currentServerSession();
+  // any query in this request runs. Prefer the Better Auth user id.
+  const session = await currentServerSession();
 
   const jar: CookieJar = {
     get: (name) => cookieStore.get(name),
@@ -23,5 +23,14 @@ export async function createClient() {
     delete: (name) => cookieStore.delete(name),
   };
 
-  return createMockServerClient(jar);
+  return createMockServerClient(
+    jar,
+    session
+      ? {
+          id: session.user.id,
+          email: session.user.email,
+          created_at: session.user.created_at,
+        }
+      : null,
+  );
 }
