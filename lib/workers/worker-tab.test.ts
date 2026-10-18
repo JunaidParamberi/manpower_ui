@@ -3,14 +3,17 @@ import { parseWorkerTab } from "./worker-tab";
 
 describe("parseWorkerTab", () => {
   it.each<[string | string[] | null | undefined, string]>([
-    ["details", "details"],
+    ["overview", "overview"],
     ["documents", "documents"],
+    ["clients", "clients"],
     ["accommodation", "accommodation"],
     ["timesheets", "timesheets"],
-    [["documents", "details"], "documents"],
-    ["bogus", "details"],
-    [undefined, "details"],
-    [null, "details"],
+    ["about", "about"],
+    ["details", "about"],
+    [["documents", "about"], "documents"],
+    ["bogus", "overview"],
+    [undefined, "overview"],
+    [null, "overview"],
   ])("%s → %s", (input, expected) => {
     expect(parseWorkerTab(input)).toBe(expected);
   });

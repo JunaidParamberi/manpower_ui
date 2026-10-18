@@ -3,7 +3,7 @@ import { WorkerDetailView } from "@/components/features/workers/detail/worker-de
 import type { WorkerTab } from "@/lib/workers/worker-tab";
 import { getWorkerById } from "@/lib/workers/worker-queries";
 
-export async function WorkerDetail({ id, tab = "details" }: { id: string; tab?: WorkerTab }) {
+export async function WorkerDetail({ id, tab = "overview" }: { id: string; tab?: WorkerTab }) {
   const worker = await getWorkerById(id);
   if (!worker) {
     notFound();

@@ -84,13 +84,13 @@ export function WorkerDetailView({
 
           <Tabs value={tab} onValueChange={onTabChange} className="mt-6">
             <TabsList>
-              <TabsTrigger value="details">Details</TabsTrigger>
+              <TabsTrigger value="about">Details</TabsTrigger>
               <TabsTrigger value="documents">Documents</TabsTrigger>
               <TabsTrigger value="accommodation">Accommodation</TabsTrigger>
               <TabsTrigger value="timesheets">Timesheets</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="details">
+            <TabsContent value="about">
               <WorkerDetailsTab worker={worker} />
             </TabsContent>
             <TabsContent value="documents">
