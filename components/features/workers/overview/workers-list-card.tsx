@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { WORKER_STATUS_LABELS } from "@/lib/validations/worker";
 import { cn } from "@/lib/utils";
+import { workerMonogram } from "@/lib/workers/worker-readiness";
 import type { WorkerListRow } from "@/types";
 
 const STATUS_VARIANT: Record<
@@ -14,13 +15,6 @@ const STATUS_VARIANT: Record<
   on_leave: "outline",
   inactive: "destructive",
 };
-
-function workerMonogram(name: string): string {
-  const parts = name.trim().split(/\s+/);
-  const first = parts[0]?.[0] ?? "";
-  const last = parts.length > 1 ? (parts[parts.length - 1]?.[0] ?? "") : "";
-  return (first + last).toUpperCase() || "?";
-}
 
 function workerMeta(worker: WorkerListRow): string {
   return [worker.employee_id, worker.trade_category, worker.supplier?.name]
