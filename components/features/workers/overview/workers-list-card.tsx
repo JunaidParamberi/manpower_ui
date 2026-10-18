@@ -69,6 +69,7 @@ function WorkerRow({ worker, selected, nowIso, onSelect, onEdit }: WorkerRowProp
       )}
       onClick={() => onSelect(worker.id)}
       onKeyDown={(event) => {
+        if (event.target !== event.currentTarget) return;
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
           onSelect(worker.id);
@@ -99,7 +100,11 @@ function WorkerRow({ worker, selected, nowIso, onSelect, onEdit }: WorkerRowProp
           {WORKER_STATUS_LABELS[worker.status]}
         </div>
       </div>
-      <div className="shrink-0" onClick={(event) => event.stopPropagation()}>
+      <div
+        className="shrink-0"
+        onClick={(event) => event.stopPropagation()}
+        onKeyDown={(event) => event.stopPropagation()}
+      >
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
