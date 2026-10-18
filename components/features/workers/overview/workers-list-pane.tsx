@@ -6,13 +6,21 @@ import {
   useSearchParams,
   useSelectedLayoutSegment,
 } from "next/navigation";
-import { useMemo, useRef, useState } from "react";
-import { useEffect } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Upload } from "lucide-react";
 
 import { pickDefaultWorker } from "@/lib/workers/active-worker";
+import {
+  countWorkerLenses,
+  matchesWorkerLens,
+  parseWorkerLens,
+  type WorkerLens,
+} from "@/lib/workers/worker-readiness";
 import { AddWorkerButton } from "@/components/features/workers/add-worker-button";
 import { WorkersListCard } from "@/components/features/workers/overview/workers-list-card";
+import { WorkerLensChips } from "@/components/features/workers/overview/worker-lens-chips";
 import { PaneSearchBox } from "@/components/shared/pane-search-box";
+import { Button } from "@/components/ui/button";
 import type { WorkerListRow } from "@/types";
 
 type WorkersListPaneProps = {
@@ -43,6 +51,8 @@ export function WorkersListPane({ workers }: WorkersListPaneProps) {
   // On /workers the page renders a default worker; mirror that pick.
   const selectedId = activeId ?? pickDefaultWorker(workers)?.id ?? null;
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
+  const lens = parseWorkerLens(searchParams.get("lens"));
+  const now = useMemo(() => new Date().toISOString(), []);
   const queryTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -51,11 +61,15 @@ export function WorkersListPane({ workers }: WorkersListPaneProps) {
     };
   }, []);
 
-  function setParams(next: { q?: string }) {
+  function setParams(next: { q?: string; lens?: WorkerLens }) {
     const params = new URLSearchParams(searchParams.toString());
     if (next.q !== undefined) {
       if (next.q.trim()) params.set("q", next.q.trim());
       else params.delete("q");
+    }
+    if (next.lens !== undefined) {
+      if (next.lens === "all") params.delete("lens");
+      else params.set("lens", next.lens);
     }
     const qs = params.toString();
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
@@ -67,9 +81,12 @@ export function WorkersListPane({ workers }: WorkersListPaneProps) {
     queryTimer.current = setTimeout(() => setParams({ q: next }), 250);
   }
 
+  const counts = useMemo(() => countWorkerLenses(workers, now), [workers, now]);
+  const deployed = counts.deployed;
+  const needsYou = counts["needs-you"];
   const visible = useMemo(
-    () => workers.filter((w) => workerMatchesQuery(w, query)),
-    [workers, query],
+    () => workers.filter((w) => matchesWorkerLens(w, lens, now) && workerMatchesQuery(w, query)),
+    [workers, lens, query, now],
   );
 
   function goToWorker(workerId: string) {
@@ -89,10 +106,23 @@ export function WorkersListPane({ workers }: WorkersListPaneProps) {
             </h1>
             <p className="mt-0.5 truncate text-meta text-[var(--fg-3)]">
               <span className="tabular-nums">{workers.length}</span> worker
-              {workers.length === 1 ? "" : "s"}
+              {workers.length === 1 ? "" : "s"} · <span className="tabular-nums">{deployed}</span> deployed
+              {needsYou > 0 ? (
+                <span className="font-medium text-[var(--danger)]"> · {needsYou} need you</span>
+              ) : null}
             </p>
           </div>
           <div className="flex shrink-0 items-center gap-1.5">
+            <Button
+              type="button"
+              variant="outline"
+              size="icon-sm"
+              disabled
+              title="Worker import is coming soon"
+              aria-label="Import workers (coming soon)"
+            >
+              <Upload />
+            </Button>
             <AddWorkerButton compact />
           </div>
         </div>
@@ -102,12 +132,15 @@ export function WorkersListPane({ workers }: WorkersListPaneProps) {
           placeholder="Find a worker"
           ariaLabel="Find a worker"
         />
+        <WorkerLensChips lens={lens} counts={counts} onChange={(l) => setParams({ lens: l })} />
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
         <WorkersListCard
           workers={visible}
           selectedId={selectedId}
+          groups={lens === "all" && !query.trim()}
+          nowIso={now}
           onClearFilters={() => {
             if (queryTimer.current) clearTimeout(queryTimer.current);
             setQuery("");
