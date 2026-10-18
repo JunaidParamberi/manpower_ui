@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 
 import { deleteWorker } from "@/lib/workers/worker-mutations";
@@ -38,6 +38,11 @@ export function DeleteWorkerButton({
   const setOpen = onOpenChange ?? setInnerOpen;
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+
+  // A controlled open (e.g. from a menu item) must not show an error from an earlier attempt.
+  useEffect(() => {
+    if (open) setError(null);
+  }, [open]);
 
   function confirmDelete() {
     setError(null);

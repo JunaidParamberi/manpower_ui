@@ -1,15 +1,18 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { MoreVertical } from "lucide-react";
+import { useState } from "react";
+import { MoreVertical, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DeleteWorkerButton } from "@/components/features/workers/delete-worker-button";
 import { WORKER_STATUS_LABELS } from "@/lib/validations/worker";
 import { cn } from "@/lib/utils";
 import {
@@ -51,9 +54,10 @@ type WorkerRowProps = {
   nowIso: string;
   onSelect: (workerId: string) => void;
   onEdit: (workerId: string) => void;
+  onDelete: (worker: WorkerListRow) => void;
 };
 
-function WorkerRow({ worker, selected, nowIso, onSelect, onEdit }: WorkerRowProps) {
+function WorkerRow({ worker, selected, nowIso, onSelect, onEdit, onDelete }: WorkerRowProps) {
   const expiry = nextExpiry(worker, nowIso);
   const expired = expiry !== null && expiry.daysLeft < 0;
   const soon = expiry !== null && expiry.daysLeft >= 0 && expiry.daysLeft <= 30;
@@ -116,6 +120,11 @@ function WorkerRow({ worker, selected, nowIso, onSelect, onEdit }: WorkerRowProp
           <DropdownMenuContent align="end" className="w-44">
             <DropdownMenuItem onClick={() => onSelect(worker.id)}>Open</DropdownMenuItem>
             <DropdownMenuItem onClick={() => onEdit(worker.id)}>Edit</DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem variant="destructive" onClick={() => onDelete(worker)}>
+              <Trash2 data-icon="inline-start" />
+              Delete
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -132,6 +141,7 @@ export function WorkersListCard({
   onSelect,
 }: WorkersListCardProps) {
   const router = useRouter();
+  const [pendingDelete, setPendingDelete] = useState<WorkerListRow | null>(null);
 
   if (workers.length === 0) {
     return (
@@ -152,8 +162,22 @@ export function WorkersListCard({
       nowIso={nowIso}
       onSelect={onSelect}
       onEdit={(workerId) => router.push(`/workers/${workerId}/edit`)}
+      onDelete={setPendingDelete}
     />
   );
+
+  const deleteDialog = pendingDelete ? (
+    <DeleteWorkerButton
+      key={pendingDelete.id}
+      workerId={pendingDelete.id}
+      workerName={pendingDelete.name}
+      open
+      onOpenChange={(open) => {
+        if (!open) setPendingDelete(null);
+      }}
+      hideTrigger
+    />
+  ) : null;
 
   if (groups) {
     return (
@@ -170,13 +194,17 @@ export function WorkersListCard({
             </section>
           );
         })}
+        {deleteDialog}
       </>
     );
   }
 
   return (
-    <ul role="list" className="pt-1.5">
-      {workers.map(renderRow)}
-    </ul>
+    <>
+      <ul role="list" className="pt-1.5">
+        {workers.map(renderRow)}
+      </ul>
+      {deleteDialog}
+    </>
   );
 }
