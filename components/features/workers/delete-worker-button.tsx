@@ -19,11 +19,23 @@ import {
 type DeleteWorkerButtonProps = {
   workerId: string;
   workerName: string;
+  /** Controlled mode, for opening the dialog from a menu item. */
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  hideTrigger?: boolean;
 };
 
-export function DeleteWorkerButton({ workerId, workerName }: DeleteWorkerButtonProps) {
+export function DeleteWorkerButton({
+  workerId,
+  workerName,
+  open: openProp,
+  onOpenChange,
+  hideTrigger = false,
+}: DeleteWorkerButtonProps) {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
+  const [innerOpen, setInnerOpen] = useState(false);
+  const open = openProp ?? innerOpen;
+  const setOpen = onOpenChange ?? setInnerOpen;
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -45,16 +57,18 @@ export function DeleteWorkerButton({ workerId, workerName }: DeleteWorkerButtonP
 
   return (
     <>
-      <Button
-        type="button"
-        variant="destructive"
-        onClick={() => {
-          setError(null);
-          setOpen(true);
-        }}
-      >
-        Delete worker
-      </Button>
+      {hideTrigger ? null : (
+        <Button
+          type="button"
+          variant="destructive"
+          onClick={() => {
+            setError(null);
+            setOpen(true);
+          }}
+        >
+          Delete worker
+        </Button>
+      )}
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent showCloseButton={true}>
