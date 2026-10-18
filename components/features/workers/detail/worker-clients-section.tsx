@@ -1,14 +1,17 @@
+"use client";
+
 import Link from "next/link";
 
 import { ClientSection, ClientSectionEmpty, SECTION_LINK } from "@/components/features/clients/detail/client-section";
+import { useWorkerHref } from "@/components/features/workers/detail/use-worker-href";
 import { workerMonogram } from "@/lib/workers/worker-readiness";
 import type { WorkerListRow } from "@/types";
 
 type WorkerClientsSectionProps = {
   worker: WorkerListRow;
   title?: string;
-  /** When set, the header link switches to "View all" for that tab. */
-  viewAllHref?: string;
+  /** When set, the header link switches to "View all" for the Clients tab. */
+  viewAll?: boolean;
   emptyText?: string;
   emptyActionLabel?: string;
   className?: string;
@@ -17,20 +20,21 @@ type WorkerClientsSectionProps = {
 export function WorkerClientsSection({
   worker,
   title = "Client sites",
-  viewAllHref,
+  viewAll,
   emptyText = "Not linked to any project client yet.",
   emptyActionLabel,
   className,
 }: WorkerClientsSectionProps) {
-  const editHref = `/workers/${worker.id}/edit`;
+  const hrefs = useWorkerHref();
+  const editHref = hrefs.edit(worker.id);
   return (
     <ClientSection
       title={title}
       count={worker.clients.length}
       className={className}
       action={
-        viewAllHref ? (
-          <Link href={viewAllHref} scroll={false} className={SECTION_LINK}>
+        viewAll ? (
+          <Link href={hrefs.detail(worker.id, "clients")} scroll={false} className={SECTION_LINK}>
             View all
           </Link>
         ) : (

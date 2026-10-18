@@ -3,6 +3,7 @@ import {
   REQUIRED_DOCUMENT_SLOTS,
   nextExpiry,
   uploadedRequiredCount,
+  workerInsured,
 } from "@/lib/workers/worker-readiness";
 import type { WorkerListRow } from "@/types";
 import { cn } from "@/lib/utils";
@@ -58,11 +59,12 @@ export function buildWorkerStatCells(worker: WorkerListRow, nowIso: string): Wor
     sub: linked > 0 ? "on site" : "not assigned",
   };
 
+  const insured = workerInsured(worker);
   const medical: WorkerStatCell = {
     label: "Medical",
     value: worker.medical_fit ? "Fit" : "Not fit",
-    sub: worker.has_insurance ? "insured" : "no insurance",
-    ...(worker.medical_fit ? {} : { tone: "warning" as const }),
+    sub: insured ? "insured" : "no insurance",
+    ...(insured ? {} : { tone: "warning" as const }),
   };
 
   return [documents, expiryCell, clients, medical];

@@ -142,6 +142,21 @@ describe("workerIssues", () => {
   it("returns [] when everything is in order", () => {
     expect(workerIssues(makeWorker(readyOverrides), NOW)).toEqual([]);
   });
+
+  it("treats an uploaded insurance card as insured", () => {
+    const w = makeWorker({
+      ...readyOverrides,
+      has_insurance: false,
+      medical_insurance_card_url: "https://x/card.pdf",
+    });
+    expect(workerIssues(w, NOW)).toEqual([]);
+    expect(workerIssues(makeWorker({ ...readyOverrides, has_insurance: false }), NOW)).toContainEqual({
+      id: "no-insurance",
+      title: "No medical insurance",
+      detail: "Add an insurance card on the Documents tab.",
+      tone: "warning",
+    });
+  });
 });
 
 describe("groups and lenses", () => {

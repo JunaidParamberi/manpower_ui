@@ -58,6 +58,11 @@ export function uploadedRequiredCount(w: WorkerListRow): number {
   return REQUIRED_DOCUMENT_SLOTS.filter((slot) => hasValue(w, columnForSlot(slot))).length;
 }
 
+/** A worker counts as insured when the flag is set or an insurance card was uploaded on the Documents tab. */
+export function workerInsured(w: WorkerListRow): boolean {
+  return Boolean(w.has_insurance) || hasValue(w, "medical_insurance_card_url");
+}
+
 export type WorkerIssue = {
   id: string;
   title: string;
@@ -106,7 +111,7 @@ export function workerIssues(w: WorkerListRow, nowIso: string): WorkerIssue[] {
     });
   }
 
-  if (!w.has_insurance) {
+  if (!workerInsured(w)) {
     issues.push({
       id: "no-insurance",
       title: "No medical insurance",

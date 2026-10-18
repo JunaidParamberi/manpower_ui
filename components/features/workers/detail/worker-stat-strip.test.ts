@@ -100,4 +100,14 @@ describe("buildWorkerStatCells", () => {
     expect(cells[2]).toEqual({ label: "Clients", value: "1 linked", sub: "on site" });
     expect(cells[3]).toEqual({ label: "Medical", value: "Fit", sub: "insured" });
   });
+
+  it("counts an uploaded insurance card as insured, with no warning tone", () => {
+    const cells = buildWorkerStatCells(makeWorker({ medical_insurance_card_url: "https://x/card.pdf" }), NOW);
+    expect(cells[3]).toEqual({ label: "Medical", value: "Not fit", sub: "insured" });
+  });
+
+  it("warns on Medical when uninsured, regardless of medical_fit", () => {
+    const cells = buildWorkerStatCells(makeWorker({ medical_fit: true }), NOW);
+    expect(cells[3]).toEqual({ label: "Medical", value: "Fit", sub: "no insurance", tone: "warning" });
+  });
 });

@@ -27,6 +27,7 @@ import type { WorkerListRow } from "@/types";
 import { cn } from "@/lib/utils";
 
 import { DeleteWorkerButton } from "@/components/features/workers/delete-worker-button";
+import { useWorkerHref } from "@/components/features/workers/detail/use-worker-href";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -62,6 +63,7 @@ export function WorkerDetailHeader({ worker, nowIso }: { worker: WorkerListRow; 
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const hrefs = useWorkerHref();
 
   const issues = workerIssues(worker, nowIso);
   const hasDanger = issues.some((i) => i.tone === "danger");
@@ -152,12 +154,12 @@ export function WorkerDetailHeader({ worker, nowIso }: { worker: WorkerListRow; 
             variant="outline"
             size="sm"
             nativeButton={false}
-            render={<Link href="?tab=documents" replace scroll={false} />}
+            render={<Link href={hrefs.detail(worker.id, "documents")} replace scroll={false} />}
           >
             <Upload />
             Upload document
           </Button>
-          <Button size="sm" nativeButton={false} render={<Link href={`/workers/${worker.id}/edit`} />}>
+          <Button size="sm" nativeButton={false} render={<Link href={hrefs.edit(worker.id)} />}>
             <Plus />
             Assign to client
           </Button>
@@ -170,7 +172,7 @@ export function WorkerDetailHeader({ worker, nowIso }: { worker: WorkerListRow; 
               }
             />
             <DropdownMenuContent align="end" className="w-44">
-              <DropdownMenuItem render={<Link href={`/workers/${worker.id}/edit`} />}>
+              <DropdownMenuItem render={<Link href={hrefs.edit(worker.id)} />}>
                 <Pencil data-icon="inline-start" />
                 Edit worker
               </DropdownMenuItem>

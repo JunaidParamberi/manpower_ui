@@ -1,15 +1,19 @@
+"use client";
+
 import Link from "next/link";
 
 import { ClientSection, ClientSectionEmpty, SECTION_LINK } from "@/components/features/clients/detail/client-section";
 import { WorkerClientsSection } from "@/components/features/workers/detail/worker-clients-section";
 import { WorkerReadinessPanel } from "@/components/features/workers/detail/worker-readiness-panel";
+import { useWorkerHref } from "@/components/features/workers/detail/use-worker-href";
 import { cn } from "@/lib/utils";
 import { EXPIRING_SOON_DAYS, workerExpiries } from "@/lib/workers/worker-readiness";
 import type { WorkerListRow } from "@/types";
 
 export function WorkerOverview({ worker, nowIso }: { worker: WorkerListRow; nowIso: string }) {
   const expiries = workerExpiries(worker, nowIso);
-  const editHref = `/workers/${worker.id}/edit`;
+  const hrefs = useWorkerHref();
+  const editHref = hrefs.edit(worker.id);
 
   return (
     <>
@@ -17,7 +21,7 @@ export function WorkerOverview({ worker, nowIso }: { worker: WorkerListRow; nowI
       <div className="grid min-w-0 gap-x-10 lg:grid-cols-2">
         <WorkerClientsSection
           worker={worker}
-          viewAllHref={`/workers/${worker.id}?tab=clients`}
+          viewAll
           emptyText="Not on any client site. "
           emptyActionLabel="Assign to client"
         />
@@ -25,7 +29,7 @@ export function WorkerOverview({ worker, nowIso }: { worker: WorkerListRow; nowI
           title="Expiries"
           count={expiries.length}
           action={
-            <Link href={`/workers/${worker.id}?tab=about`} scroll={false} className={SECTION_LINK}>
+            <Link href={hrefs.detail(worker.id, "about")} scroll={false} className={SECTION_LINK}>
               View all
             </Link>
           }
