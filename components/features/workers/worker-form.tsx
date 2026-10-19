@@ -31,7 +31,6 @@ import { FormDatePicker } from "@/components/shared/form-date-picker";
 import {
   WorkspaceFormAside,
   WorkspaceFormMain,
-  WorkspaceFormSection,
   WorkspaceFormShell,
 } from "@/components/shared/workspace-form-shell";
 import { WorkerWorkspacePanel } from "@/components/features/workers/worker-workspace-panel";
@@ -163,290 +162,260 @@ export function WorkerForm(props: WorkerFormProps) {
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <WorkspaceFormShell>
         <WorkspaceFormMain>
-          <WorkspaceFormSection
-            title="Identity"
-            description="Who the worker is, who they work for, and their deployment status."
-          >
-            <FieldGroup>
-              <Field>
-                <FieldLabel htmlFor="worker-employee-id">
-                  Employee ID *
-                </FieldLabel>
-                <Input
-                  id="worker-employee-id"
-                  maxLength={WORKER_LIMITS.employee_id}
-                  disabled={props.mode === "edit"}
-                  {...register("employee_id", { required: true })}
-                />
-                {errors.employee_id && (
-                  <p className="text-sm text-destructive">
-                    Employee ID is required.
+          <FieldGroup className="grid gap-x-6 gap-y-7 sm:grid-cols-2">
+            <Field>
+              <FieldLabel htmlFor="worker-employee-id">
+                Employee ID *
+              </FieldLabel>
+              <Input
+                id="worker-employee-id"
+                maxLength={WORKER_LIMITS.employee_id}
+                disabled={props.mode === "edit"}
+                {...register("employee_id", { required: true })}
+              />
+              {errors.employee_id && (
+                <p className="text-sm text-destructive">
+                  Employee ID is required.
+                </p>
+              )}
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="worker-name">Name *</FieldLabel>
+              <Input
+                id="worker-name"
+                maxLength={WORKER_LIMITS.name}
+                {...register("name", { required: true })}
+              />
+              {errors.name && (
+                <p className="text-sm text-destructive">Name is required.</p>
+              )}
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="worker-nationality">Nationality</FieldLabel>
+              <Input
+                id="worker-nationality"
+                maxLength={WORKER_LIMITS.nationality}
+                {...register("nationality")}
+              />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="worker-trade">Trade category</FieldLabel>
+              <Input
+                id="worker-trade"
+                maxLength={WORKER_LIMITS.trade_category}
+                {...register("trade_category")}
+              />
+            </Field>
+
+            <Field>
+              <FieldLabel htmlFor="worker-supplier">Supplier</FieldLabel>
+              <Select
+                value={watch("supplier_id") ?? SUPPLIER_NONE}
+                onValueChange={(v) =>
+                  setValue("supplier_id", v === SUPPLIER_NONE ? null : v)
+                }
+              >
+                <SelectTrigger id="worker-supplier">
+                  <span className="truncate text-start">
+                    {props.suppliers.find((s) => s.id === watch("supplier_id"))
+                      ?.name ?? "Leave blank for internal workers"}
+                  </span>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value={SUPPLIER_NONE}>No supplier</SelectItem>
+                    {props.suppliers.map((s) => (
+                      <SelectItem key={s.id} value={s.id}>
+                        {s.name}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </Field>
+
+            <Field>
+              <FieldLabel htmlFor="worker-status">Status *</FieldLabel>
+              <Select
+                value={watch("status")}
+                onValueChange={(v) =>
+                  setValue("status", v as WorkerInput["status"])
+                }
+              >
+                <SelectTrigger id="worker-status">
+                  <span className="truncate text-start">
+                    {WORKER_STATUS_LABELS[watch("status")]}
+                  </span>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {WORKER_STATUSES.map((status) => (
+                      <SelectItem key={status} value={status}>
+                        {WORKER_STATUS_LABELS[status]}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </Field>
+
+            <Field className="sm:col-span-2">
+              <FieldLabel>Clients</FieldLabel>
+              <div className="flex flex-wrap gap-2">
+                {props.projectClients.map((c) => (
+                  <button
+                    type="button"
+                    key={c.id}
+                    onClick={() => toggleClient(c.id)}
+                    className={
+                      selectedClientIds.includes(c.id)
+                        ? "rounded-full border border-primary bg-primary/10 px-3 py-1 text-sm text-primary"
+                        : "rounded-full border border-border/80 px-3 py-1 text-sm text-muted-foreground"
+                    }
+                  >
+                    {c.name}
+                  </button>
+                ))}
+                {props.projectClients.length === 0 && (
+                  <p className="text-sm text-muted-foreground">
+                    No project clients yet.
                   </p>
                 )}
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="worker-name">Name *</FieldLabel>
-                <Input
-                  id="worker-name"
-                  maxLength={WORKER_LIMITS.name}
-                  {...register("name", { required: true })}
-                />
-                {errors.name && (
-                  <p className="text-sm text-destructive">Name is required.</p>
-                )}
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="worker-nationality">
-                  Nationality
-                </FieldLabel>
-                <Input
-                  id="worker-nationality"
-                  maxLength={WORKER_LIMITS.nationality}
-                  {...register("nationality")}
-                />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="worker-trade">Trade category</FieldLabel>
-                <Input
-                  id="worker-trade"
-                  maxLength={WORKER_LIMITS.trade_category}
-                  {...register("trade_category")}
-                />
-              </Field>
+              </div>
+            </Field>
 
-              <Field>
-                <FieldLabel htmlFor="worker-supplier">Supplier</FieldLabel>
-                <Select
-                  value={watch("supplier_id") ?? SUPPLIER_NONE}
-                  onValueChange={(v) =>
-                    setValue("supplier_id", v === SUPPLIER_NONE ? null : v)
-                  }
-                >
-                  <SelectTrigger id="worker-supplier">
-                    <span className="truncate text-start">
-                      {props.suppliers.find(
-                        (s) => s.id === watch("supplier_id"),
-                      )?.name ?? "Leave blank for internal workers"}
-                    </span>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value={SUPPLIER_NONE}>No supplier</SelectItem>
-                      {props.suppliers.map((s) => (
-                        <SelectItem key={s.id} value={s.id}>
-                          {s.name}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </Field>
-
-              <Field>
-                <FieldLabel>Clients</FieldLabel>
-                <div className="flex flex-wrap gap-2">
-                  {props.projectClients.map((c) => (
-                    <button
-                      type="button"
-                      key={c.id}
-                      onClick={() => toggleClient(c.id)}
-                      className={
-                        selectedClientIds.includes(c.id)
-                          ? "rounded-full border border-primary bg-primary/10 px-3 py-1 text-sm text-primary"
-                          : "rounded-full border border-border/80 px-3 py-1 text-sm text-muted-foreground"
-                      }
-                    >
-                      {c.name}
-                    </button>
-                  ))}
-                  {props.projectClients.length === 0 && (
-                    <p className="text-sm text-muted-foreground">
-                      No project clients yet.
-                    </p>
-                  )}
-                </div>
-              </Field>
-
-              <Field>
-                <FieldLabel htmlFor="worker-status">Status *</FieldLabel>
-                <Select
-                  value={watch("status")}
-                  onValueChange={(v) =>
-                    setValue("status", v as WorkerInput["status"])
-                  }
-                >
-                  <SelectTrigger id="worker-status">
-                    <span className="truncate text-start">
-                      {WORKER_STATUS_LABELS[watch("status")]}
-                    </span>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {WORKER_STATUSES.map((status) => (
-                        <SelectItem key={status} value={status}>
-                          {WORKER_STATUS_LABELS[status]}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </Field>
-            </FieldGroup>
-          </WorkspaceFormSection>
-
-          <WorkspaceFormSection
-            title="Document details"
-            description="References and expiry dates. Upload the actual documents from the worker page after saving."
-          >
-            <FieldGroup>
-              <Field>
-                <FieldLabel htmlFor="worker-passport-number">
-                  Passport Number
-                </FieldLabel>
-                <Input
-                  id="worker-passport-number"
-                  maxLength={WORKER_LIMITS.doc_number}
-                  {...register("passport_number")}
-                />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="worker-passport-expiry">
-                  Passport Expiry
-                </FieldLabel>
-                <Controller
-                  name="passport_expiry"
-                  control={control}
-                  render={({ field }) => (
-                    <FormDatePicker
-                      id="worker-passport-expiry"
-                      value={field.value ?? ""}
-                      onChange={field.onChange}
-                    />
-                  )}
-                />
-              </Field>
-
-              <Field>
-                <FieldLabel htmlFor="worker-emirates-id">
-                  Emirates ID
-                </FieldLabel>
-                <Input
-                  id="worker-emirates-id"
-                  maxLength={WORKER_LIMITS.doc_number}
-                  {...register("emirates_id")}
-                />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="worker-emirates-id-expiry">
-                  Emirates ID Expiry
-                </FieldLabel>
-                <Controller
-                  name="emirates_id_expiry"
-                  control={control}
-                  render={({ field }) => (
-                    <FormDatePicker
-                      id="worker-emirates-id-expiry"
-                      value={field.value ?? ""}
-                      onChange={field.onChange}
-                    />
-                  )}
-                />
-              </Field>
-
-              <Field>
-                <FieldLabel htmlFor="worker-visa-number">
-                  Visa Number
-                </FieldLabel>
-                <Input
-                  id="worker-visa-number"
-                  maxLength={WORKER_LIMITS.doc_number}
-                  {...register("visa_number")}
-                />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="worker-visa-expiry">
-                  Visa Expiry
-                </FieldLabel>
-                <Controller
-                  name="visa_expiry"
-                  control={control}
-                  render={({ field }) => (
-                    <FormDatePicker
-                      id="worker-visa-expiry"
-                      value={field.value ?? ""}
-                      onChange={field.onChange}
-                    />
-                  )}
-                />
-              </Field>
-            </FieldGroup>
-          </WorkspaceFormSection>
-
-          <WorkspaceFormSection
-            title="Medical and insurance"
-            description="Fitness and insurance cover."
-          >
-            <FieldGroup>
-              <Field>
-                <label className="flex cursor-pointer items-center gap-2 text-sm">
-                  <Checkbox
-                    checked={watch("medical_fit")}
-                    onCheckedChange={(checked) =>
-                      setValue("medical_fit", checked === true)
-                    }
-                  />
-                  <span className="font-medium">Medically fit</span>
-                </label>
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="worker-medical-expiry">
-                  Medical Expiry
-                </FieldLabel>
-                <Controller
-                  name="medical_expiry"
-                  control={control}
-                  render={({ field }) => (
-                    <FormDatePicker
-                      id="worker-medical-expiry"
-                      value={field.value ?? ""}
-                      onChange={field.onChange}
-                    />
-                  )}
-                />
-              </Field>
-
-              <Field>
-                <label className="flex cursor-pointer items-center gap-2 text-sm">
-                  <Checkbox
-                    checked={watch("has_insurance")}
-                    onCheckedChange={(checked) =>
-                      setValue("has_insurance", checked === true)
-                    }
-                  />
-                  <span className="font-medium">Has insurance</span>
-                </label>
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="worker-insurance-expiry">
-                  Insurance Expiry
-                </FieldLabel>
-                <Controller
-                  name="insurance_expiry"
-                  control={control}
-                  render={({ field }) => (
-                    <FormDatePicker
-                      id="worker-insurance-expiry"
-                      value={field.value ?? ""}
-                      onChange={field.onChange}
-                    />
-                  )}
-                />
-              </Field>
-            </FieldGroup>
-          </WorkspaceFormSection>
-
-          <WorkspaceFormSection title="Notes">
             <Field>
+              <FieldLabel htmlFor="worker-passport-number">
+                Passport Number
+              </FieldLabel>
+              <Input
+                id="worker-passport-number"
+                maxLength={WORKER_LIMITS.doc_number}
+                {...register("passport_number")}
+              />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="worker-passport-expiry">
+                Passport Expiry
+              </FieldLabel>
+              <Controller
+                name="passport_expiry"
+                control={control}
+                render={({ field }) => (
+                  <FormDatePicker
+                    id="worker-passport-expiry"
+                    value={field.value ?? ""}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            </Field>
+
+            <Field>
+              <FieldLabel htmlFor="worker-emirates-id">Emirates ID</FieldLabel>
+              <Input
+                id="worker-emirates-id"
+                maxLength={WORKER_LIMITS.doc_number}
+                {...register("emirates_id")}
+              />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="worker-emirates-id-expiry">
+                Emirates ID Expiry
+              </FieldLabel>
+              <Controller
+                name="emirates_id_expiry"
+                control={control}
+                render={({ field }) => (
+                  <FormDatePicker
+                    id="worker-emirates-id-expiry"
+                    value={field.value ?? ""}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            </Field>
+
+            <Field>
+              <FieldLabel htmlFor="worker-visa-number">Visa Number</FieldLabel>
+              <Input
+                id="worker-visa-number"
+                maxLength={WORKER_LIMITS.doc_number}
+                {...register("visa_number")}
+              />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="worker-visa-expiry">Visa Expiry</FieldLabel>
+              <Controller
+                name="visa_expiry"
+                control={control}
+                render={({ field }) => (
+                  <FormDatePicker
+                    id="worker-visa-expiry"
+                    value={field.value ?? ""}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            </Field>
+
+            <Field>
+              <label className="flex cursor-pointer items-center gap-2 text-sm">
+                <Checkbox
+                  checked={watch("medical_fit")}
+                  onCheckedChange={(checked) =>
+                    setValue("medical_fit", checked === true)
+                  }
+                />
+                <span className="font-medium">Medically fit</span>
+              </label>
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="worker-medical-expiry">
+                Medical Expiry
+              </FieldLabel>
+              <Controller
+                name="medical_expiry"
+                control={control}
+                render={({ field }) => (
+                  <FormDatePicker
+                    id="worker-medical-expiry"
+                    value={field.value ?? ""}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            </Field>
+
+            <Field>
+              <label className="flex cursor-pointer items-center gap-2 text-sm">
+                <Checkbox
+                  checked={watch("has_insurance")}
+                  onCheckedChange={(checked) =>
+                    setValue("has_insurance", checked === true)
+                  }
+                />
+                <span className="font-medium">Has insurance</span>
+              </label>
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="worker-insurance-expiry">
+                Insurance Expiry
+              </FieldLabel>
+              <Controller
+                name="insurance_expiry"
+                control={control}
+                render={({ field }) => (
+                  <FormDatePicker
+                    id="worker-insurance-expiry"
+                    value={field.value ?? ""}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            </Field>
+
+            <Field className="sm:col-span-2">
               <FieldLabel htmlFor="worker-notes">Notes</FieldLabel>
               <Textarea
                 id="worker-notes"
@@ -454,7 +423,7 @@ export function WorkerForm(props: WorkerFormProps) {
                 {...register("notes")}
               />
             </Field>
-          </WorkspaceFormSection>
+          </FieldGroup>
 
           <div className="flex items-center gap-3">
             <Button type="submit" disabled={isPending}>
