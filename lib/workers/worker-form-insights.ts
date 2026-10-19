@@ -11,6 +11,19 @@ type CompletionItem = {
   id: "employee_id" | "name" | "status" | "id_details" | "expiries";
   label: string;
   complete: boolean;
+  /** DOM id of the first field to fix for this item — powers aside jump links. */
+  jumpTarget: string;
+};
+
+export type WorkerFormSteps = {
+  identity: boolean;
+  work: boolean;
+  documents: boolean;
+};
+
+export type ExpiryNote = {
+  label: "expired" | "due soon" | "valid";
+  tone: "danger" | "warning" | "muted";
 };
 
 export type WorkerFormInsights = {
@@ -29,6 +42,10 @@ export type WorkerFormInsights = {
   totalCount: number;
   completionPercent: number;
   missingEssentials: string[];
+  /** Grouped completion for the stepped form layout. */
+  steps: WorkerFormSteps;
+  completedSteps: number;
+  totalSteps: number;
 };
 
 const EXPIRY_FIELDS: ReadonlyArray<{
@@ -75,6 +92,27 @@ function nextExpiryLabel(values: WorkerInput, nowIso: string): string | null {
   return `${next.label} · in ${next.daysLeft}d`;
 }
 
+/** Per-field hint for the documents table — "expired" / "due soon" (≤30d) / "valid". */
+export function expiryNote(
+  date: string | null | undefined,
+  nowIso: string,
+): ExpiryNote | null {
+  const value = text(date);
+  if (!value) return null;
+  const daysLeft = daysBetweenIso(nowIso, value);
+  if (!Number.isFinite(daysLeft)) return null;
+  if (daysLeft < 0) return { label: "expired", tone: "danger" };
+  if (daysLeft <= 30) return { label: "due soon", tone: "warning" };
+  return { label: "valid", tone: "muted" };
+}
+
+/** DOM id of the first incomplete field among a group — the jump-link target. */
+function firstMissing(
+  fields: ReadonlyArray<{ complete: boolean; id: string }>,
+): string {
+  return fields.find((f) => !f.complete)?.id ?? fields[0].id;
+}
+
 export function buildWorkerFormInsights(
   values: WorkerInput,
   nowIso: string,
@@ -85,31 +123,77 @@ export function buildWorkerFormInsights(
   const trade = text(values.trade_category);
   const nationality = text(values.nationality);
   const status = values.status;
+  const clientsCount = values.client_ids?.length ?? 0;
+
+  const numberFields = [
+    {
+      complete: Boolean(text(values.passport_number)),
+      id: "worker-passport-number",
+    },
+    { complete: Boolean(text(values.emirates_id)), id: "worker-emirates-id" },
+    { complete: Boolean(text(values.visa_number)), id: "worker-visa-number" },
+  ];
+  const expiryFields = [
+    {
+      complete: Boolean(text(values.passport_expiry as string | null)),
+      id: "worker-passport-expiry",
+    },
+    {
+      complete: Boolean(text(values.emirates_id_expiry as string | null)),
+      id: "worker-emirates-id-expiry",
+    },
+    {
+      complete: Boolean(text(values.visa_expiry as string | null)),
+      id: "worker-visa-expiry",
+    },
+  ];
+  const idDetailsComplete = numberFields.every((f) => f.complete);
+  const expiriesComplete = expiryFields.every((f) => f.complete);
 
   const completionItems: CompletionItem[] = [
-    { id: "employee_id", label: "Employee ID", complete: Boolean(employeeId) },
-    { id: "name", label: "Name", complete: Boolean(name) },
-    { id: "status", label: "Status", complete: Boolean(status) },
+    {
+      id: "employee_id",
+      label: "Employee ID",
+      complete: Boolean(employeeId),
+      jumpTarget: "worker-employee-id",
+    },
+    {
+      id: "name",
+      label: "Name",
+      complete: Boolean(name),
+      jumpTarget: "worker-name",
+    },
+    {
+      id: "status",
+      label: "Status",
+      complete: Boolean(status),
+      jumpTarget: "worker-status",
+    },
     {
       id: "id_details",
       label: "Passport, Emirates ID & visa numbers",
-      complete: Boolean(
-        text(values.passport_number) &&
-        text(values.emirates_id) &&
-        text(values.visa_number),
-      ),
+      complete: idDetailsComplete,
+      jumpTarget: firstMissing(numberFields),
     },
     {
       id: "expiries",
       label: "Passport, Emirates ID & visa expiries",
-      complete: Boolean(
-        text(values.passport_expiry as string | null) &&
-        text(values.emirates_id_expiry as string | null) &&
-        text(values.visa_expiry as string | null),
-      ),
+      complete: expiriesComplete,
+      jumpTarget: firstMissing(expiryFields),
     },
   ];
   const completedCount = completionItems.filter((item) => item.complete).length;
+
+  // Step 2 ticks once a placement exists (supplier or client site) — a nudge,
+  // not validation: internal workers may genuinely have neither.
+  const steps: WorkerFormSteps = {
+    identity: Boolean(employeeId && name),
+    work: Boolean(status) && Boolean(text(values.supplier_id) || clientsCount),
+    documents: idDetailsComplete && expiriesComplete,
+  };
+  const completedSteps = [steps.identity, steps.work, steps.documents].filter(
+    Boolean,
+  ).length;
 
   return {
     monogram: workerMonogram(name),
@@ -119,7 +203,7 @@ export function buildWorkerFormInsights(
     metaLabel: [employeeId, trade, nationality].filter(Boolean).join(" · "),
     supplierLabel:
       suppliers.find((s) => s.id === values.supplier_id)?.name ?? "",
-    clientsCount: values.client_ids?.length ?? 0,
+    clientsCount,
     nextExpiryLabel: nextExpiryLabel(values, nowIso),
     completionItems,
     completedCount,
@@ -131,5 +215,8 @@ export function buildWorkerFormInsights(
     missingEssentials: completionItems
       .filter((item) => !item.complete)
       .map((item) => MISSING_COPY[item.id]),
+    steps,
+    completedSteps,
+    totalSteps: 3,
   };
 }

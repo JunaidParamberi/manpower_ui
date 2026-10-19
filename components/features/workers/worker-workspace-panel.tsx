@@ -24,13 +24,19 @@ const STATUS_PILL: Record<WorkerStatusValue, string> = {
 type WorkerWorkspacePanelProps = {
   insights: WorkerFormInsights;
   mode: "create" | "edit";
+  /** Scrolls to and focuses the field for a missing item (by DOM id). */
+  onJump?: (fieldId: string) => void;
 };
 
 export function WorkerWorkspacePanel({
   insights,
   mode,
+  onJump,
 }: WorkerWorkspacePanelProps) {
   const hasMissingEssentials = insights.missingEssentials.length > 0;
+  const missingItems = insights.completionItems.filter(
+    (item) => !item.complete,
+  );
   const workLine = [
     insights.supplierLabel,
     insights.clientsCount > 0
@@ -131,9 +137,30 @@ export function WorkerWorkspacePanel({
         title={hasMissingEssentials ? "Before you save" : "Ready for documents"}
       >
         {hasMissingEssentials ? (
-          <ul className="flex flex-col gap-2 text-sm text-muted-foreground">
-            {insights.missingEssentials.map((item) => (
-              <li key={item}>{item}</li>
+          <ul className="flex flex-col gap-1 text-sm text-muted-foreground">
+            {/* missingEssentials mirrors the filtered completionItems 1:1 (same filter, same order). */}
+            {missingItems.map((item, i) => (
+              <li key={item.id}>
+                {onJump ? (
+                  <button
+                    type="button"
+                    onClick={() => onJump(item.jumpTarget)}
+                    className="-mx-2 flex w-[calc(100%+1rem)] items-center justify-between gap-2 rounded-md px-2 py-1.5 text-left transition-colors hover:bg-muted hover:text-foreground"
+                  >
+                    <span>{insights.missingEssentials[i]}</span>
+                    <span
+                      aria-hidden
+                      className="text-muted-foreground/60 transition-transform group-hover:translate-x-0.5"
+                    >
+                      →
+                    </span>
+                  </button>
+                ) : (
+                  <span className="block py-1">
+                    {insights.missingEssentials[i]}
+                  </span>
+                )}
+              </li>
             ))}
           </ul>
         ) : (

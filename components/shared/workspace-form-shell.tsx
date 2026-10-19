@@ -22,7 +22,7 @@ type WorkspaceFormAreaProps = {
 };
 
 type WorkspaceFormSectionProps = {
-  title: string;
+  title: ReactNode;
   description?: string;
   action?: ReactNode;
   children: ReactNode;
@@ -61,7 +61,9 @@ export function WorkspaceFormMain({
   className,
 }: WorkspaceFormAreaProps) {
   return (
-    <div className={cn("flex min-w-0 flex-col gap-5", className)}>{children}</div>
+    <div className={cn("flex min-w-0 flex-col gap-5", className)}>
+      {children}
+    </div>
   );
 }
 
@@ -91,14 +93,23 @@ export function WorkspaceFormSection({
   contentClassName,
 }: WorkspaceFormSectionProps) {
   return (
-    <Card className={cn("border border-border shadow-sm ring-1 ring-border", className)}>
+    <Card
+      className={cn(
+        "border border-border shadow-sm ring-1 ring-border",
+        className,
+      )}
+    >
       <CardHeader className="border-b border-border pb-4">
         <CardTitle>{title}</CardTitle>
         {description ? <CardDescription>{description}</CardDescription> : null}
         {action ? <CardAction>{action}</CardAction> : null}
       </CardHeader>
-      <CardContent className={cn("pt-0", contentClassName)}>{children}</CardContent>
-      {footer ? <CardFooter className="border-t border-border">{footer}</CardFooter> : null}
+      <CardContent className={cn("pt-0", contentClassName)}>
+        {children}
+      </CardContent>
+      {footer ? (
+        <CardFooter className="border-t border-border">{footer}</CardFooter>
+      ) : null}
     </Card>
   );
 }
@@ -118,7 +129,9 @@ export function WorkspaceInsightCard({
         {description ? <CardDescription>{description}</CardDescription> : null}
         {action ? <CardAction>{action}</CardAction> : null}
       </CardHeader>
-      <CardContent className={cn("pt-0", contentClassName)}>{children}</CardContent>
+      <CardContent className={cn("pt-0", contentClassName)}>
+        {children}
+      </CardContent>
     </Card>
   );
 }

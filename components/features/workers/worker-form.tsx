@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useMemo, useState, useTransition } from "react";
-import { Controller, useForm, useWatch } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
 import { createWorker, updateWorker } from "@/lib/workers/worker-mutations";
@@ -16,7 +16,6 @@ import {
 } from "@/lib/validations/worker";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
@@ -27,13 +26,13 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { FormDatePicker } from "@/components/shared/form-date-picker";
 import {
   WorkspaceFormAside,
   WorkspaceFormMain,
-  WorkspaceFormSection,
   WorkspaceFormShell,
 } from "@/components/shared/workspace-form-shell";
+import { WorkerDocumentsTable } from "@/components/features/workers/worker-form-documents";
+import { WorkerFormStep } from "@/components/features/workers/worker-form-step";
 import { WorkerWorkspacePanel } from "@/components/features/workers/worker-workspace-panel";
 import type { ProjectClientRow, SupplierRow, WorkerListRow } from "@/types";
 
@@ -139,6 +138,13 @@ export function WorkerForm(props: WorkerFormProps) {
     setValue("client_ids", next);
   }
 
+  function jumpTo(fieldId: string) {
+    const el = document.getElementById(fieldId);
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    el.focus({ preventScroll: true });
+  }
+
   function onSubmit(values: WorkerInput) {
     startTransition(async () => {
       const payload = { ...values, client_ids: selectedClientIds };
@@ -163,11 +169,28 @@ export function WorkerForm(props: WorkerFormProps) {
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <WorkspaceFormShell>
         <WorkspaceFormMain>
-          <WorkspaceFormSection
+          <div className="flex items-center gap-3">
+            <span className="whitespace-nowrap text-sm text-muted-foreground">
+              {insights.completedSteps} of {insights.totalSteps} steps complete
+            </span>
+            <div className="h-1 flex-1 overflow-hidden rounded-full bg-muted">
+              <div
+                className="h-full rounded-full bg-primary transition-[width] duration-200"
+                style={{
+                  width: `${(insights.completedSteps / insights.totalSteps) * 100}%`,
+                }}
+              />
+            </div>
+          </div>
+
+          <WorkerFormStep
+            n={1}
             title="Identity"
-            description="Who the worker is, who they work for, and their deployment status."
+            hint="Who is this person"
+            required
+            complete={insights.steps.identity}
           >
-            <FieldGroup>
+            <FieldGroup className="grid gap-4 sm:grid-cols-2">
               <Field>
                 <FieldLabel htmlFor="worker-employee-id">
                   Employee ID *
@@ -213,7 +236,16 @@ export function WorkerForm(props: WorkerFormProps) {
                   {...register("trade_category")}
                 />
               </Field>
+            </FieldGroup>
+          </WorkerFormStep>
 
+          <WorkerFormStep
+            n={2}
+            title="Work"
+            hint="Where they work right now"
+            complete={insights.steps.work}
+          >
+            <FieldGroup className="grid gap-4 sm:grid-cols-2">
               <Field>
                 <FieldLabel htmlFor="worker-supplier">Supplier</FieldLabel>
                 <Select
@@ -243,31 +275,6 @@ export function WorkerForm(props: WorkerFormProps) {
               </Field>
 
               <Field>
-                <FieldLabel>Clients</FieldLabel>
-                <div className="flex flex-wrap gap-2">
-                  {props.projectClients.map((c) => (
-                    <button
-                      type="button"
-                      key={c.id}
-                      onClick={() => toggleClient(c.id)}
-                      className={
-                        selectedClientIds.includes(c.id)
-                          ? "rounded-full border border-primary bg-primary/10 px-3 py-1 text-sm text-primary"
-                          : "rounded-full border border-border/80 px-3 py-1 text-sm text-muted-foreground"
-                      }
-                    >
-                      {c.name}
-                    </button>
-                  ))}
-                  {props.projectClients.length === 0 && (
-                    <p className="text-sm text-muted-foreground">
-                      No project clients yet.
-                    </p>
-                  )}
-                </div>
-              </Field>
-
-              <Field>
                 <FieldLabel htmlFor="worker-status">Status *</FieldLabel>
                 <Select
                   value={watch("status")}
@@ -291,170 +298,59 @@ export function WorkerForm(props: WorkerFormProps) {
                   </SelectContent>
                 </Select>
               </Field>
-            </FieldGroup>
-          </WorkspaceFormSection>
 
-          <WorkspaceFormSection
-            title="Document details"
-            description="References and expiry dates. Upload the actual documents from the worker page after saving."
+              <Field className="sm:col-span-2">
+                <FieldLabel>Clients</FieldLabel>
+                <div className="flex flex-wrap gap-2">
+                  {props.projectClients.map((c) => (
+                    <button
+                      type="button"
+                      key={c.id}
+                      onClick={() => toggleClient(c.id)}
+                      className={
+                        selectedClientIds.includes(c.id)
+                          ? "rounded-full border border-primary bg-primary/10 px-3 py-1 text-sm text-primary"
+                          : "rounded-full border border-border/80 px-3 py-1 text-sm text-muted-foreground"
+                      }
+                    >
+                      {c.name}
+                    </button>
+                  ))}
+                  {props.projectClients.length === 0 && (
+                    <p className="text-sm text-muted-foreground">
+                      No project clients yet.
+                    </p>
+                  )}
+                </div>
+              </Field>
+            </FieldGroup>
+          </WorkerFormStep>
+
+          <WorkerFormStep
+            n={3}
+            title="Documents & medical"
+            hint="Numbers & dates — attach scans later"
+            complete={insights.steps.documents}
           >
-            <FieldGroup>
-              <Field>
-                <FieldLabel htmlFor="worker-passport-number">
-                  Passport Number
-                </FieldLabel>
-                <Input
-                  id="worker-passport-number"
-                  maxLength={WORKER_LIMITS.doc_number}
-                  {...register("passport_number")}
-                />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="worker-passport-expiry">
-                  Passport Expiry
-                </FieldLabel>
-                <Controller
-                  name="passport_expiry"
-                  control={control}
-                  render={({ field }) => (
-                    <FormDatePicker
-                      id="worker-passport-expiry"
-                      value={field.value ?? ""}
-                      onChange={field.onChange}
-                    />
-                  )}
-                />
-              </Field>
-
-              <Field>
-                <FieldLabel htmlFor="worker-emirates-id">
-                  Emirates ID
-                </FieldLabel>
-                <Input
-                  id="worker-emirates-id"
-                  maxLength={WORKER_LIMITS.doc_number}
-                  {...register("emirates_id")}
-                />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="worker-emirates-id-expiry">
-                  Emirates ID Expiry
-                </FieldLabel>
-                <Controller
-                  name="emirates_id_expiry"
-                  control={control}
-                  render={({ field }) => (
-                    <FormDatePicker
-                      id="worker-emirates-id-expiry"
-                      value={field.value ?? ""}
-                      onChange={field.onChange}
-                    />
-                  )}
-                />
-              </Field>
-
-              <Field>
-                <FieldLabel htmlFor="worker-visa-number">
-                  Visa Number
-                </FieldLabel>
-                <Input
-                  id="worker-visa-number"
-                  maxLength={WORKER_LIMITS.doc_number}
-                  {...register("visa_number")}
-                />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="worker-visa-expiry">
-                  Visa Expiry
-                </FieldLabel>
-                <Controller
-                  name="visa_expiry"
-                  control={control}
-                  render={({ field }) => (
-                    <FormDatePicker
-                      id="worker-visa-expiry"
-                      value={field.value ?? ""}
-                      onChange={field.onChange}
-                    />
-                  )}
-                />
-              </Field>
-            </FieldGroup>
-          </WorkspaceFormSection>
-
-          <WorkspaceFormSection
-            title="Medical and insurance"
-            description="Fitness and insurance cover."
-          >
-            <FieldGroup>
-              <Field>
-                <label className="flex cursor-pointer items-center gap-2 text-sm">
-                  <Checkbox
-                    checked={watch("medical_fit")}
-                    onCheckedChange={(checked) =>
-                      setValue("medical_fit", checked === true)
-                    }
-                  />
-                  <span className="font-medium">Medically fit</span>
-                </label>
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="worker-medical-expiry">
-                  Medical Expiry
-                </FieldLabel>
-                <Controller
-                  name="medical_expiry"
-                  control={control}
-                  render={({ field }) => (
-                    <FormDatePicker
-                      id="worker-medical-expiry"
-                      value={field.value ?? ""}
-                      onChange={field.onChange}
-                    />
-                  )}
-                />
-              </Field>
-
-              <Field>
-                <label className="flex cursor-pointer items-center gap-2 text-sm">
-                  <Checkbox
-                    checked={watch("has_insurance")}
-                    onCheckedChange={(checked) =>
-                      setValue("has_insurance", checked === true)
-                    }
-                  />
-                  <span className="font-medium">Has insurance</span>
-                </label>
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="worker-insurance-expiry">
-                  Insurance Expiry
-                </FieldLabel>
-                <Controller
-                  name="insurance_expiry"
-                  control={control}
-                  render={({ field }) => (
-                    <FormDatePicker
-                      id="worker-insurance-expiry"
-                      value={field.value ?? ""}
-                      onChange={field.onChange}
-                    />
-                  )}
-                />
-              </Field>
-            </FieldGroup>
-          </WorkspaceFormSection>
-
-          <WorkspaceFormSection title="Notes">
-            <Field>
-              <FieldLabel htmlFor="worker-notes">Notes</FieldLabel>
-              <Textarea
-                id="worker-notes"
-                maxLength={WORKER_LIMITS.notes}
-                {...register("notes")}
+            <div className="flex flex-col gap-5">
+              <WorkerDocumentsTable
+                control={control}
+                register={register}
+                watch={watch}
+                setValue={setValue}
+                nowIso={nowIso}
               />
-            </Field>
-          </WorkspaceFormSection>
+
+              <Field>
+                <FieldLabel htmlFor="worker-notes">Notes</FieldLabel>
+                <Textarea
+                  id="worker-notes"
+                  maxLength={WORKER_LIMITS.notes}
+                  {...register("notes")}
+                />
+              </Field>
+            </div>
+          </WorkerFormStep>
 
           <div className="flex items-center gap-3">
             <Button type="submit" disabled={isPending}>
@@ -471,7 +367,11 @@ export function WorkerForm(props: WorkerFormProps) {
         </WorkspaceFormMain>
 
         <WorkspaceFormAside>
-          <WorkerWorkspacePanel insights={insights} mode={props.mode} />
+          <WorkerWorkspacePanel
+            insights={insights}
+            mode={props.mode}
+            onJump={jumpTo}
+          />
         </WorkspaceFormAside>
       </WorkspaceFormShell>
     </form>
