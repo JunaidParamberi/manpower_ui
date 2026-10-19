@@ -10,7 +10,7 @@ export const metadata: Metadata = { title: "New worker" };
 export default async function NewWorkerPage() {
   const [suppliers, projectClients] = await Promise.all([listSuppliers(), listProjectClients()]);
   return (
-    <FormPageShell maxWidth="3xl">
+    <FormPageShell maxWidth="7xl">
       <div className="flex flex-col gap-8">
         <PageHeader
           backHref="/workers"

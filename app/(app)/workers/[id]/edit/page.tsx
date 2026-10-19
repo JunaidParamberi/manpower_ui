@@ -25,7 +25,7 @@ export default async function EditWorkerPage({ params }: PageProps) {
   if (!worker) notFound();
 
   return (
-    <FormPageShell maxWidth="3xl">
+    <FormPageShell maxWidth="7xl">
       <div className="flex flex-col gap-8">
         <PageHeader
           backHref={`/workers/${id}`}
